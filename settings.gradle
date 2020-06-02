@@ -1,0 +1,2 @@
+rootProject.name='Show Episode Generator'
+include ':app'
