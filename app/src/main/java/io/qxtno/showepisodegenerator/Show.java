@@ -1,7 +1,14 @@
 package io.qxtno.showepisodegenerator;
 
-public class Show {
-    public String title;
-    public int[] seasons;
+class Show {
+    private String title;
+    private int[] seasons;
 
+    String getTitle() {
+        return title;
+    }
+
+    int[] getSeasons() {
+        return seasons;
+    }
 }

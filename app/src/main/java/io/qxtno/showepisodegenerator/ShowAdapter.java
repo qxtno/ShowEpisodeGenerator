@@ -1,16 +1,73 @@
 package io.qxtno.showepisodegenerator;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder>{
+import java.util.ArrayList;
 
+public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder> {
     private Context mContext;
+    private ArrayList<Show> showArrayList;
+    private OnItemClickListener mListener;
 
-
-    public class ShowViewHolder extends RecyclerView.ViewHolder{
-        public TextView mTextView;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
+
+    void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    ShowAdapter(Context context, ArrayList<Show> showsList) {
+        mContext = context;
+        showArrayList = showsList;
+    }
+
+    @NonNull
+    @Override
+    public ShowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.show_item, parent, false);
+        return new ShowViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ShowViewHolder holder, int position) {
+        Show currentItem = showArrayList.get(position);
+        String title = currentItem.getTitle();
+
+        holder.mTextView.setText(title);
+    }
+
+    @Override
+    public int getItemCount() {
+        return showArrayList.size();
+    }
+
+    class ShowViewHolder extends RecyclerView.ViewHolder {
+        TextView mTextView;
+
+        ShowViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mTextView = itemView.findViewById(R.id.show_item_title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
 }
