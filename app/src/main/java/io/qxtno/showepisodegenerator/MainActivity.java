@@ -1,11 +1,16 @@
 package io.qxtno.showepisodegenerator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
     public static final String SEASONS = "seasons";
 
     private ArrayList<Show> showArrayList;
+    private ShowAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +42,45 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ShowAdapter mAdapter = new ShowAdapter(MainActivity.this, showArrayList);
+        mAdapter = new ShowAdapter(MainActivity.this, showArrayList);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(MainActivity.this);
     }
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(this,ShowActivity.class);
+        Intent intent = new Intent(this, ShowActivity.class);
         Show clickedItem = showArrayList.get(position);
         Bundle b = new Bundle();
-        b.putIntArray(SEASONS,clickedItem.getSeasons());
+        b.putIntArray(SEASONS, clickedItem.getSeasons());
 
-        intent.putExtra(TITLE,clickedItem.getTitle());
+        intent.putExtra(TITLE, clickedItem.getTitle());
         intent.putExtras(b);
 
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
+
     }
 }

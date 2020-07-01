@@ -3,4 +3,5 @@
     <string name="ep">"Episode: "</string>
     <string name="se">"Season: "</string>
     <string name="random">Random Episode</string>
+    <string name="search">Search</string>
 </resources>
