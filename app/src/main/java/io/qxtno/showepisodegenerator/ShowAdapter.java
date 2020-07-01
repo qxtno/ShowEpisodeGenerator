@@ -74,7 +74,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
     }
 
 
-
     public void filter(String text) {
         filteredList.clear();
         if (text.isEmpty()) {

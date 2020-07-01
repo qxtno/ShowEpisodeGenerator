@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createList();
+
+        prepareRecyclerView();
+    }
+
+    private void createList() {
         Gson gson = new Gson();
 
         String jsonString = JsonHelper.getJsonFromAssets(getApplicationContext());
@@ -37,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
         Type type = new TypeToken<ArrayList<Show>>() {
         }.getType();
         showArrayList = gson.fromJson(jsonString, type);
+    }
 
+    private void prepareRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
             @Override
             public boolean onQueryTextChange(String newText) {
                 mAdapter.filter(newText);
-            return true;
+                return true;
             }
         });
         return true;
