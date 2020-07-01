@@ -71,13 +71,14 @@ public class MainActivity extends AppCompatActivity implements ShowAdapter.OnIte
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                mAdapter.filter(query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAdapter.getFilter().filter(newText);
-                return false;
+                mAdapter.filter(newText);
+            return true;
             }
         });
         return true;
