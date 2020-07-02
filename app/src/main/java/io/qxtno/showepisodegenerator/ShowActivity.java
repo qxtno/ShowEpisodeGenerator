@@ -9,14 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Objects;
 import java.util.Random;
 
-import static io.qxtno.showepisodegenerator.MainActivity.SEASONS;
-import static io.qxtno.showepisodegenerator.MainActivity.TITLE;
+import static io.qxtno.showepisodegenerator.HomeFragment.SEASONS;
+import static io.qxtno.showepisodegenerator.HomeFragment.TITLE;
 
 public class ShowActivity extends AppCompatActivity {
     Button randomize;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,8 @@ public class ShowActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(TITLE);
@@ -57,6 +59,5 @@ public class ShowActivity extends AppCompatActivity {
                 resultTextView.setText(episodeInfo);
             }
         });
-
     }
 }
