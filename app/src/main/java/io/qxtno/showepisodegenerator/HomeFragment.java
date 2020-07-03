@@ -27,8 +27,6 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickListener {
 
-    public static final String TITLE = "title";
-    public static final String SEASONS = "seasons";
     private ArrayList<Show> showArrayList;
     private ShowAdapter mAdapter;
 
@@ -93,12 +91,8 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
-        Show clickedItem = showArrayList.get(position);
-        Bundle b = new Bundle();
-        b.putIntArray(SEASONS, clickedItem.getSeasons());
 
-        intent.putExtra(TITLE, clickedItem.getTitle());
-        intent.putExtras(b);
+        intent.putExtra("Show Item", showArrayList.get(position));
 
         startActivity(intent);
     }

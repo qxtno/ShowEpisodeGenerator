@@ -12,9 +12,6 @@ import android.widget.TextView;
 import java.util.Objects;
 import java.util.Random;
 
-import static io.qxtno.showepisodegenerator.HomeFragment.SEASONS;
-import static io.qxtno.showepisodegenerator.HomeFragment.TITLE;
-
 public class ShowActivity extends AppCompatActivity {
     Button randomize;
 
@@ -29,11 +26,10 @@ public class ShowActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        String title = intent.getStringExtra(TITLE);
-        Bundle b = this.getIntent().getExtras();
-
-        assert b != null;
-        final int[] seasons = b.getIntArray(SEASONS);
+        Show show = intent.getParcelableExtra("Show Item");
+        assert show != null;
+        final String title = show.getTitle();
+        final int[] seasons = show.getSeasons();
 
         TextView titleTextView = findViewById(R.id.title);
         titleTextView.setText(title);
