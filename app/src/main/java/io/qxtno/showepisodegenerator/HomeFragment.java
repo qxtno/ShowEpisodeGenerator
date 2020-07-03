@@ -21,6 +21,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickListener {
@@ -41,6 +43,14 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         Type type = new TypeToken<ArrayList<Show>>() {
         }.getType();
         showArrayList = gson.fromJson(jsonString, type);
+
+        assert showArrayList != null;
+        Collections.sort(showArrayList, new Comparator<Show>() {
+            @Override
+            public int compare(Show s1, Show s2) {
+                return s1.getTitle().compareTo(s2.getTitle());
+            }
+        });
 
 
         RecyclerView mRecyclerView = view.findViewById(R.id.recyclerView);
