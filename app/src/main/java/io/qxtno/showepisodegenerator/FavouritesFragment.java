@@ -1,6 +1,8 @@
 package io.qxtno.showepisodegenerator;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,9 @@ import java.util.ArrayList;
 
 public class FavouritesFragment extends Fragment implements FavouritesAdapter.OnItemClickListener {
     FavouritesAdapter mAdapter;
-    ArrayList<Show> favList = new ArrayList<>();
+    ArrayList<FavItem> favList = new ArrayList<>();
+    private FavDB favDB;
+    RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -24,26 +28,53 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
 
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
-        int[] tab = {10, 22, 43, 12, 32, 54, 12};
+        /*int[] tab = {10, 22, 43, 12, 32, 54, 12};
         Show show = new Show("friends", tab);
-        favList.add(show);
+        favList.add(show);*/
 
-        RecyclerView recyclerView = view.findViewById(R.id.favRecyclerView);
+        favDB = new FavDB(getActivity());
+
+        recyclerView = view.findViewById(R.id.favRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        loadData();
+
+
+        return view;
+    }
+
+    private void loadData() {
+        if (favList != null) {
+            favList.clear();
+        }
+        SQLiteDatabase db = favDB.getReadableDatabase();
+        Cursor cursor = favDB.selectFav();
+        try {
+            while (cursor.moveToNext()) {
+                String title = cursor.getString(cursor.getColumnIndex(FavDB.ITEM_TITLE));
+                String id = cursor.getString(cursor.getColumnIndex(FavDB.KEY_ID));
+                String seasons = cursor.getString(cursor.getColumnIndex(FavDB.ITEM_SEASONS));
+                FavItem favItem = new FavItem(title, id, seasons);
+                favList.add(favItem);
+            }
+        } finally {
+            if (cursor != null && cursor.isClosed()) {
+                cursor.close();
+            }
+            db.close();
+        }
 
         mAdapter = new FavouritesAdapter(getActivity(), favList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
-
-        return view;
     }
 
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
-        intent.putExtra("Show Item", favList.get(position));
+        intent.putExtra("Fav Item", favList.get(position));
 
         startActivity(intent);
     }
