@@ -1,9 +1,11 @@
 package io.qxtno.showepisodegenerator;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +30,40 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
 
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
-        /*int[] tab = {10, 22, 43, 12, 32, 54, 12};
-        Show show = new Show("friends", tab);
-        favList.add(show);*/
+        ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
+        SQLiteDatabase mDatabase;
 
-        favDB = new FavDB(getActivity());
+        mDatabase = dbHelper.getReadableDatabase();
+        String[] field = {ShowContract.ShowEntry.COLUMN_TITLE, ShowContract.ShowEntry.COLUMN_SEASONS, ShowContract.ShowEntry.COLUMN_FAV};
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(ShowContract.ShowEntry.TABLE_NAME, field, null, null, null, null, null);
 
-        recyclerView = view.findViewById(R.id.favRecyclerView);
+        ArrayList<Show> showList = new ArrayList<>();
+
+        int ititle = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_TITLE);
+        int iseasons = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_SEASONS);
+        int ifav = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_FAV);
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            String title = cursor.getString(ititle);
+            String seasonString = cursor.getString(iseasons);
+            String fav = cursor.getString(ifav);
+            String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
+            int[] seasons = new int[items.length];
+            for (int i = 0; i < items.length; i++) {
+                try {
+                    seasons[i] = Integer.parseInt(items[i]);
+                } catch (NumberFormatException nfe) {
+                    Log.i("To Array Error Fav", "Error while parsing string to an array");
+                }
+
+            }
+            if(Integer.parseInt(fav) == 1){
+                showList.add(new Show(title, seasons, Integer.parseInt(fav)));
+            }
+        }
+        showFavListDB = showList;
+
+        RecyclerView recyclerView = view.findViewById(R.id.favRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

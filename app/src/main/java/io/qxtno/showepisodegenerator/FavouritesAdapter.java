@@ -34,7 +34,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     FavouritesAdapter(Context context, ArrayList<FavItem> favList) {
         mContext = context;
         this.favArrayList = favList;
-        //favListFull = new ArrayList<>(favList);
+        favListFull = new ArrayList<>(favList);
     }
 
     @NonNull
