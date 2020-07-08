@@ -117,4 +117,37 @@ public class ShowDBHelper extends SQLiteOpenHelper {
         return showList;
     }
 
+    public List<Show> getFavShows(){
+        List<Show> showList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + ShowEntry.TABLE_NAME;
+
+        SQLiteDatabase mDatabase = this.getWritableDatabase();
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.rawQuery(selectQuery,null);
+        if(cursor.moveToNext()){
+            do{
+                Show show = new Show();
+                show.setId(Integer.parseInt(cursor.getString(0)));
+                show.setTitle(cursor.getString(1));
+                String seasonString = cursor.getString(2);
+                String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
+                int[] seasons = new int[items.length];
+
+                for (int i = 0; i < items.length; i++) {
+                    try {
+                        seasons[i] = Integer.parseInt(items[i]);
+                    } catch (NumberFormatException nfe) {
+                        Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                    }
+                }
+                show.setSeasons(seasons);
+                show.setFav(Integer.parseInt(cursor.getString(3)));
+
+                if(show.getFav()==1){
+                    showList.add(show);
+                }
+            }while (cursor.moveToNext());
+        }
+        return showList;
+    }
+
 }
