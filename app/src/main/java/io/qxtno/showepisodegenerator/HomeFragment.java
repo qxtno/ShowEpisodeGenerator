@@ -1,14 +1,10 @@
 package io.qxtno.showepisodegenerator;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,14 +24,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickListener {
 
-    private ArrayList<Show> showListDB;
+    private ArrayList<Show> showList;
     private ShowAdapter mAdapter;
 
 
@@ -46,12 +41,11 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
-        SQLiteDatabase mDatabase = dbHelper.getWritableDatabase();
 
         SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences", Context.MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
 
-        if(firstStart){
+        if (firstStart) {
             Gson gson = new Gson();
             String jsonString = JsonHelper.getJsonFromAssets(Objects.requireNonNull(getActivity()).getApplicationContext());
 
@@ -62,52 +56,16 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
             assert showArrayList != null;
             for (Show show : showArrayList) {
-                String title = show.getTitle();
-                String seasons = Arrays.toString(show.getSeasons());
-                String fav = Integer.toString(show.getFav());
-
-                ContentValues cv = new ContentValues();
-
-                cv.put(ShowContract.ShowEntry.COLUMN_TITLE, title);
-                cv.put(ShowContract.ShowEntry.COLUMN_SEASONS, seasons);
-                cv.put(ShowContract.ShowEntry.COLUMN_FAV, fav);
-
-                mDatabase.insert(ShowContract.ShowEntry.TABLE_NAME, null, cv);
+                dbHelper.addShow(show);
             }
 
-            SharedPreferences prefs = getContext().getSharedPreferences("preferences",Context.MODE_PRIVATE);
+            SharedPreferences prefs = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
             @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstStart", false);
             editor.apply();
         }
 
-        mDatabase = dbHelper.getReadableDatabase();
-        String[] field = {ShowContract.ShowEntry.COLUMN_TITLE, ShowContract.ShowEntry.COLUMN_SEASONS, ShowContract.ShowEntry.COLUMN_FAV};
-        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(ShowContract.ShowEntry.TABLE_NAME, field, null, null, null, null, null);
-
-        ArrayList<Show> showList = new ArrayList<>();
-
-        int ititle = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_TITLE);
-        int iseasons = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_SEASONS);
-        int ifav = cursor.getColumnIndex(ShowContract.ShowEntry.COLUMN_FAV);
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            String title = cursor.getString(ititle);
-            String seasonString = cursor.getString(iseasons);
-            String fav = cursor.getString(ifav);
-            String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
-            int[] seasons = new int[items.length];
-            for (int i = 0; i < items.length; i++) {
-                try {
-                    seasons[i] = Integer.parseInt(items[i]);
-                } catch (NumberFormatException nfe) {
-                    Log.i("To Array Error Home", "Error while parsing string to an array");
-                }
-
-            }
-            showList.add(new Show(title, seasons, Integer.parseInt(fav)));
-        }
-        showListDB = showList;
+        showList = (ArrayList<Show>) dbHelper.getAllShows();
 
         Collections.sort(showList, new Comparator<Show>() {
             @Override
@@ -115,7 +73,6 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
                 return s1.getTitle().compareTo(s2.getTitle());
             }
         });
-
 
         RecyclerView mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -153,25 +110,12 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
-        intent.putExtra("Show Item", showListDB.get(position));
+        intent.putExtra("Show Item", showList.get(position));
 
         startActivity(intent);
     }
-
-    /*private Cursor getAllItems(){
-        return mDatabase.query(
-                ShowContract.ShowEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                ShowContract.ShowEntry.COLUMN_TIMESTAMP + " DESC "
-        );
-    }*/
 }

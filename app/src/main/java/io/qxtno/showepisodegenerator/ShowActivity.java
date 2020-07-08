@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class ShowActivity extends AppCompatActivity {
     Button randomize;
+    ShowDBHelper dbHelper = new ShowDBHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class ShowActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        Show show = intent.getParcelableExtra("Show Item");
+        final Show show = intent.getParcelableExtra("Show Item");
         assert show != null;
         final String title = show.getTitle();
         final int[] seasons = show.getSeasons();
@@ -53,6 +54,19 @@ public class ShowActivity extends AppCompatActivity {
                         randomEpisode;
                 TextView resultTextView = findViewById(R.id.result);
                 resultTextView.setText(episodeInfo);
+            }
+        });
+
+        Button add = findViewById(R.id.add_to_fav);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(show.getFav()==0){
+                    show.setFav(1);
+                }else {
+                    show.setFav(0);
+                }
+                dbHelper.updateShow(show);
             }
         });
     }

@@ -3,36 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShowActivity"
+    android:orientation="vertical"
     android:weightSum="1"
-    android:orientation="vertical">
+    tools:context=".ShowActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        />
+        layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
         android:layout_weight="0.2"
-        android:textAlignment="center"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textAlignment="center"
+            tools:ignore="NestedWeights" />
+
+        <Button
+            android:id="@+id/add_to_fav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/add"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
         android:layout_weight="0.7"
-        android:textAlignment="center"/>
+        android:text=""
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/random"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/random"
-        android:layout_weight="0.1"/>
+        android:layout_weight="0.1"
+        android:text="@string/random" />
 
 </LinearLayout>
