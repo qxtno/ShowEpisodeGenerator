@@ -1,10 +1,6 @@
 package io.qxtno.showepisodegenerator;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +14,10 @@ import java.util.ArrayList;
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
     private Context mContext;
-    private ArrayList<FavItem> favArrayList;
-    //private ArrayList<Show> favListFull;
+    private ArrayList<Show> favArrayList;
+    private ArrayList<Show> favListFull;
+    ArrayList<Show> filteredList = new ArrayList<>();
     private OnItemClickListener mListener;
-    private FavDB favDB;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -31,7 +27,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         mListener = listener;
     }
 
-    FavouritesAdapter(Context context, ArrayList<FavItem> favList) {
+    FavouritesAdapter(Context context, ArrayList<Show> favList) {
         mContext = context;
         this.favArrayList = favList;
         favListFull = new ArrayList<>(favList);
@@ -40,22 +36,15 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     @NonNull
     @Override
     public FavouritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        favDB = new FavDB(mContext);
-        SharedPreferences preferences = mContext.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        boolean firstStart = preferences.getBoolean("firstStart", true);
-        if (firstStart) {
-            createTableOnFirstStart();
-        }
         View v = LayoutInflater.from(mContext).inflate(R.layout.show_item, parent, false);
         return new FavouritesViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavouritesViewHolder holder, int position) {
-        FavItem currentItem = favArrayList.get(position);
-        //readCursorData(currentItem, holder);
-        holder.mTextView.setText(currentItem.getItem_title());
+        Show currentItem = favArrayList.get(position);
+        String title = currentItem.getTitle();
+        holder.mTextView.setText(title);
     }
 
     @Override
@@ -84,30 +73,20 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         }
     }
 
-    private void createTableOnFirstStart() {
-        favDB.insertEmpty();
-        SharedPreferences preferences = mContext.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("firstStart", false);
-        editor.apply();
-    }
-
-/*    private void readCursorData(FavItem favItem, RecyclerView.ViewHolder viewHolder) {
-        Cursor cursor = favDB.readAllData(favItem.getKey_id());
-        SQLiteDatabase db = favDB.getReadableDatabase();
-        try{
-            while (cursor.moveToNext()){
-                String item_fav_status = cursor.getString(cursor.getColumnIndex(FavDB.FAVOURITE_STATUS));
-                favItem.setFav(item_fav_status);
-
+    public void filter(String text) {
+        filteredList.clear();
+        if (text.isEmpty()) {
+            filteredList.addAll(favListFull);
+        } else {
+            text = text.toLowerCase();
+            for (Show show : favListFull) {
+                if (show.getTitle().toLowerCase().contains(text)) {
+                    filteredList.add(show);
+                }
             }
-
-        }finally {
-            if(cursor!=null&&cursor.isClosed()){
-                cursor.close();
-            }
-            db.close();
         }
-        db.close();
-    }*/
+        favArrayList.clear();
+        favArrayList.addAll(filteredList);
+        notifyDataSetChanged();
+    }
 }

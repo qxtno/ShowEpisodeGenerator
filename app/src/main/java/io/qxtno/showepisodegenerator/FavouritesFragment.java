@@ -20,9 +20,7 @@ import java.util.ArrayList;
 
 public class FavouritesFragment extends Fragment implements FavouritesAdapter.OnItemClickListener {
     FavouritesAdapter mAdapter;
-    ArrayList<FavItem> favList = new ArrayList<>();
-    private FavDB favDB;
-    RecyclerView recyclerView;
+    ArrayList<Show> showFavListDB;
 
     @Nullable
     @Override
@@ -38,36 +36,13 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        loadData();
-
-
-        return view;
-    }
-
-    private void loadData() {
-        if (favList != null) {
-            favList.clear();
-        }
-        SQLiteDatabase db = favDB.getReadableDatabase();
-        Cursor cursor = favDB.selectFav();
-        try {
-            while (cursor.moveToNext()) {
-                String title = cursor.getString(cursor.getColumnIndex(FavDB.ITEM_TITLE));
-                String id = cursor.getString(cursor.getColumnIndex(FavDB.KEY_ID));
-                String seasons = cursor.getString(cursor.getColumnIndex(FavDB.ITEM_SEASONS));
-                FavItem favItem = new FavItem(title, id, seasons);
-                favList.add(favItem);
-            }
-        } finally {
-            if (cursor != null && cursor.isClosed()) {
-                cursor.close();
-            }
-            db.close();
-        }
-
-        mAdapter = new FavouritesAdapter(getActivity(), favList);
+        mAdapter = new FavouritesAdapter(getActivity(), showFavListDB);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
+
+        setHasOptionsMenu(true);
+
+        return view;
     }
 
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -97,7 +72,7 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
-        intent.putExtra("Fav Item", favList.get(position));
+        intent.putExtra("Show Item", showFavListDB.get(position));
 
         startActivity(intent);
     }
