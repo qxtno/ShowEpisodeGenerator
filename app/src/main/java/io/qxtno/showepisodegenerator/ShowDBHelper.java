@@ -77,14 +77,14 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 cursor.getString(1), seasons, Integer.parseInt(cursor.getString(3)));
     }
 
-    public int updateShow(Show show){
+    public void updateShow(Show show){
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ShowEntry.COLUMN_FAV, show.getFav());
 
-        return mDatabase.update(ShowEntry.TABLE_NAME,contentValues, ShowEntry.COLUMN_ID + " = ?",
-                new String[] {String.valueOf(show.getId())});
+        mDatabase.update(ShowEntry.TABLE_NAME, contentValues, ShowEntry.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(show.getId())});
     }
 
     public List<Show> getAllShows(){

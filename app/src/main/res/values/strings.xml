@@ -10,6 +10,11 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="add">Add to favourites</string>
+    <string name="add_new">Add new show</string>
+    <string name="title">Title</string>
+    <string name="seasons">Seasons</string>
+    <string name="added">New show was added</string>
+    <string name="to_fav">Add also to favourites</string>
     <string name="navigation_draw_open">Open navigation drawer</string>
     <string name="navigation_draw_close">Close navigation drawer</string>
 </resources>

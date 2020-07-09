@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/title_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/title"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/seasons_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/seasons"
+        android:autofillHints="" />
+
+    <CheckBox
+        android:id="@+id/fav_check_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/to_fav" />
+
+    <Button
+        android:id="@+id/add_new_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_new" />
+
+</LinearLayout>
