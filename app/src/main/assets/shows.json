@@ -13,7 +13,8 @@
       24,
       18
     ],
-    "fav": 1
+    "fav": true,
+    "custom" : false
   },
   {
     "title": "Seinfeld",
@@ -28,7 +29,8 @@
       22,
       24
     ],
-    "fav": 0
+    "fav": false,
+    "custom" : false
   },
   {
     "title": "The Big Bang Theory",
@@ -46,7 +48,8 @@
       24,
       24
     ],
-    "fav": 0
+    "fav": false,
+    "custom" : false
   },
   {
     "title": "How I Met Your Mother",
@@ -61,6 +64,7 @@
       24,
       24
     ],
-    "fav": 0
+    "fav": false,
+    "custom" : false
   }
 ]

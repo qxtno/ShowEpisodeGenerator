@@ -61,10 +61,11 @@ public class NewShowFragment extends Fragment {
                 boolean checked = favCheckBox.isChecked();
 
                 if (checked) {
-                    show.setFav(1);
+                    show.setFav(true);
                 } else {
-                    show.setFav(0);
+                    show.setFav(false);
                 }
+                show.setCustom(true);
 
                 ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
                 dbHelper.addShow(show);

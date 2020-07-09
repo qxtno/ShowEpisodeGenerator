@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 import java.util.Random;
@@ -61,12 +62,25 @@ public class ShowActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(show.getFav()==0){
-                    show.setFav(1);
+                if(!show.isFav()){
+                    show.setFav(true);
                 }else {
-                    show.setFav(0);
+                    show.setFav(false);
                 }
                 dbHelper.updateShow(show);
+            }
+        });
+
+        Button delete = findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(show.isCustom()){
+                    dbHelper.deleteShow(show);
+                    Toast.makeText(ShowActivity.this, R.string.delete_done, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(ShowActivity.this,R.string.cannot_delete,Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

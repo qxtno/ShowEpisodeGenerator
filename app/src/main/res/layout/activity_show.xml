@@ -20,8 +20,8 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text=""
             android:textAlignment="center"
             tools:ignore="NestedWeights" />
@@ -30,8 +30,17 @@
             android:id="@+id/add_to_fav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/add"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/add" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete" />
+
+
     </LinearLayout>
 
     <TextView

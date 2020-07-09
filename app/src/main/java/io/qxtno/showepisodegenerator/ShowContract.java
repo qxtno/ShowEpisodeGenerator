@@ -12,6 +12,7 @@ public class ShowContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_SEASONS = "seasons";
         public static final String COLUMN_FAV = "fav";
+        public static final String COLUMN_CUSTOM = "custom";
         public static final String COLUMN_TIMESTAMP = "timestamp";
     }
 }

@@ -7,19 +7,21 @@ class Show implements Parcelable {
     private int id;
     private String title;
     private int[] seasons;
-    private int fav;
+    private boolean fav;
+    private boolean custom;
 
     public Show() {
     }
 
-    Show(int id, String title, int[] seasons, int fav) {
+    Show(int id, String title, int[] seasons, boolean fav, boolean custom) {
         this.id = id;
         this.title = title;
         this.seasons = seasons;
         this.fav = fav;
+        this.custom = custom;
     }
 
-    public Show(String title, int[] seasons, int fav) {
+    public Show(String title, int[] seasons, boolean fav, boolean custom) {
         this.title = title;
         this.seasons = seasons;
         this.fav = fav;
@@ -29,7 +31,8 @@ class Show implements Parcelable {
         id = in.readInt();
         title = in.readString();
         seasons = in.createIntArray();
-        fav = in.readInt();
+        fav = in.readInt() == 1;
+        custom = in.readInt() == 1;
     }
 
     public static final Creator<Show> CREATOR = new Creator<Show>() {
@@ -69,12 +72,20 @@ class Show implements Parcelable {
         return seasons;
     }
 
-    public int getFav() {
+    public boolean isFav() {
         return fav;
     }
 
-    public void setFav(int fav) {
+    public void setFav(boolean fav) {
         this.fav = fav;
+    }
+
+    public boolean isCustom() {
+        return custom;
+    }
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
     }
 
     @Override
@@ -87,6 +98,7 @@ class Show implements Parcelable {
         dest.writeInt(id);
         dest.writeString(title);
         dest.writeIntArray(seasons);
-        dest.writeInt(fav);
+        dest.writeInt(fav ? 1 : 0);
+        dest.writeInt(custom ? 1 : 0);
     }
 }
