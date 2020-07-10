@@ -18,6 +18,9 @@
     <string name="delete">Delete Show</string>
     <string name="cannot_delete">You can only delete custom added shows</string>
     <string name="delete_done">You successfully deleted show</string>
+    <string name="sort_a_z">Sort</string>
+    <string name="natural_order">Shows sorted in natural order</string>
+    <string name="natural_order_reversed">Shows sorted in reversed natural order</string>
     <string name="navigation_draw_open">Open navigation drawer</string>
     <string name="navigation_draw_close">Close navigation drawer</string>
 </resources>

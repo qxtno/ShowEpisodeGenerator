@@ -1,6 +1,5 @@
 package io.qxtno.showepisodegenerator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +32,9 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
     private ArrayList<Show> showList;
     private ShowAdapter mAdapter;
-
+    private SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private boolean sorted;
 
     @Nullable
     @Override
@@ -42,7 +44,7 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
         ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
 
-        SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences", Context.MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
 
         if (firstStart) {
@@ -59,20 +61,15 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
                 dbHelper.addShow(show);
             }
 
-            SharedPreferences prefs = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
-            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = prefs.edit();
+            preferences = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            editor = preferences.edit();
             editor.putBoolean("firstStart", false);
             editor.apply();
         }
 
         showList = (ArrayList<Show>) dbHelper.getAllShows();
 
-        Collections.sort(showList, new Comparator<Show>() {
-            @Override
-            public int compare(Show s1, Show s2) {
-                return s1.getTitle().compareTo(s2.getTitle());
-            }
-        });
+        sortInit();
 
         RecyclerView mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -85,6 +82,54 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    private void sortInit() {
+        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        sorted = preferences.getBoolean("sorted",true);
+
+        if(sorted){
+            sort();
+        }else {
+            sortReverse();
+        }
+    }
+
+    private void sort() {
+        Collections.sort(showList, new Comparator<Show>() {
+            @Override
+            public int compare(Show s1, Show s2) {
+                return s1.getTitle().compareTo(s2.getTitle());
+            }
+        });
+    }
+
+    private void sortReverse(){
+        Collections.sort(showList, new Comparator<Show>() {
+            @Override
+            public int compare(Show s1, Show s2) {
+                return s2.getTitle().compareTo(s1.getTitle());
+            }
+        });
+    }
+
+    private void sortList(){
+        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        sorted = preferences.getBoolean("sorted",true);
+        editor = preferences.edit();
+        if(sorted){
+            sortReverse();
+            editor.putBoolean("sorted", false);
+            sorted = preferences.getBoolean("sorted",false);
+            Toast.makeText(getActivity(),R.string.natural_order_reversed,Toast.LENGTH_SHORT).show();
+        }else{
+            sort();
+            editor.putBoolean("sorted", true);
+            sorted = preferences.getBoolean("sorted",true);
+            Toast.makeText(getActivity(),R.string.natural_order,Toast.LENGTH_SHORT).show();
+        }
+        editor.apply();
+        mAdapter.notifyDataSetChanged();
     }
 
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -107,6 +152,17 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
                 return true;
             }
         });
+
+        final MenuItem sort = menu.findItem(R.id.sort_a_z);
+
+        sort.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                sortList();
+                return true;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
