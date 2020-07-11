@@ -124,7 +124,7 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
             }
         });
 
-        MenuItem sort = menu.findItem(R.id.sort_a_z);
+        MenuItem sort = menu.findItem(R.id.action_sort);
         sort.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

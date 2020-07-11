@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
             }
         });
 
-        final MenuItem sort = menu.findItem(R.id.sort_a_z);
+        final MenuItem sort = menu.findItem(R.id.action_sort);
 
         sort.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
