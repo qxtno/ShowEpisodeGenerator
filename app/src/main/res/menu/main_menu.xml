@@ -8,10 +8,9 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
-        android:id="@+id/sort_a_z"
+        android:id="@+id/action_sort"
         android:icon="@drawable/ic_sort"
         android:title="@string/sort_a_z"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 
 </menu>

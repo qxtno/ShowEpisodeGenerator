@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditActivity">
+
+    <EditText
+        android:id="@+id/activity_edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/title"
+        android:text=""
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/activity_edit_seasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/seasons"
+        android:text=""
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/activity_edit_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:text="@string/save" />
+</LinearLayout>

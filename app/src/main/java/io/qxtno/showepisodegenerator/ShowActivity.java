@@ -5,6 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +19,8 @@ import java.util.Random;
 public class ShowActivity extends AppCompatActivity {
     Button randomize;
     ShowDBHelper dbHelper = new ShowDBHelper(this);
+    Show show;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +29,13 @@ public class ShowActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        final Show show = intent.getParcelableExtra("Show Item");
+        show = intent.getParcelableExtra("Show Item");
+
         assert show != null;
         final String title = show.getTitle();
         final int[] seasons = show.getSeasons();
@@ -62,26 +69,56 @@ public class ShowActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!show.isFav()){
+                if (!show.isFav()) {
                     show.setFav(true);
-                }else {
+                } else {
                     show.setFav(false);
                 }
                 dbHelper.updateShow(show);
             }
         });
+    }
 
-        Button delete = findViewById(R.id.delete);
-        delete.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.show_activity_menu, menu);
+
+        MenuItem edit = menu.findItem(R.id.action_edit);
+        edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                if(show.isCustom()){
-                    dbHelper.deleteShow(show);
-                    Toast.makeText(ShowActivity.this, R.string.delete_done, Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(ShowActivity.this,R.string.cannot_delete,Toast.LENGTH_SHORT).show();
+            public boolean onMenuItemClick(MenuItem item) {
+                if (show.isCustom()) {
+                    Intent intent = new Intent(ShowActivity.this, EditActivity.class);
+
+                    intent.putExtra("Show Item Edit", show);
+
+                    startActivity(intent);
+
+                    return true;
+                } else {
+                    Toast.makeText(ShowActivity.this, R.string.cannot_edit, Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             }
         });
+
+        MenuItem delete = menu.findItem(R.id.action_delete);
+        delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (show.isCustom()) {
+                    dbHelper.deleteShow(show);
+                    Toast.makeText(ShowActivity.this, R.string.delete_done, Toast.LENGTH_SHORT).show();
+                    return true;
+                } else {
+                    Toast.makeText(ShowActivity.this, R.string.cannot_delete, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        });
+
+        return true;
     }
 }

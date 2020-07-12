@@ -15,9 +15,13 @@
     <string name="seasons">Seasons</string>
     <string name="added">New show was added</string>
     <string name="to_fav">Add also to favourites</string>
-    <string name="delete">Delete Show</string>
+    <string name="delete">Delete show</string>
+    <string name="edit">Edit show</string>
+    <string name="save">Save</string>
     <string name="cannot_delete">You can only delete custom added shows</string>
     <string name="delete_done">You successfully deleted show</string>
+    <string name="cannot_edit">You cannot edit this show</string>
+    <string name="edit_done">You successfully edited this show</string>
     <string name="sort_a_z">Sort</string>
     <string name="natural_order">Shows sorted in natural order</string>
     <string name="natural_order_reversed">Shows sorted in reversed natural order</string>
