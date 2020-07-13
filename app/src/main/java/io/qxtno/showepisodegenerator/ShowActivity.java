@@ -83,41 +83,45 @@ public class ShowActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.show_activity_menu, menu);
 
-        MenuItem edit = menu.findItem(R.id.action_edit);
-        edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (show.isCustom()) {
-                    Intent intent = new Intent(ShowActivity.this, EditActivity.class);
+        if (show.isCustom()) {
+            inflater.inflate(R.menu.show_activity_menu, menu);
+            MenuItem edit = menu.findItem(R.id.action_edit);
+            edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (show.isCustom()) {
+                        Intent intent = new Intent(ShowActivity.this, EditActivity.class);
 
-                    intent.putExtra("Show Item Edit", show);
+                        intent.putExtra("Show Item Edit", show);
 
-                    startActivity(intent);
+                        startActivity(intent);
 
-                    return true;
-                } else {
-                    Toast.makeText(ShowActivity.this, R.string.cannot_edit, Toast.LENGTH_SHORT).show();
-                    return false;
+                        return true;
+                    } else {
+                        Toast.makeText(ShowActivity.this, R.string.cannot_edit, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
-            }
-        });
+            });
 
-        MenuItem delete = menu.findItem(R.id.action_delete);
-        delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (show.isCustom()) {
-                    dbHelper.deleteShow(show);
-                    Toast.makeText(ShowActivity.this, R.string.delete_done, Toast.LENGTH_SHORT).show();
-                    return true;
-                } else {
-                    Toast.makeText(ShowActivity.this, R.string.cannot_delete, Toast.LENGTH_SHORT).show();
-                    return false;
+            final MenuItem delete = menu.findItem(R.id.action_delete);
+            delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (show.isCustom()) {
+                        dbHelper.deleteShow(show);
+                        Toast.makeText(ShowActivity.this, R.string.delete_done, Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else {
+                        Toast.makeText(ShowActivity.this, R.string.cannot_delete, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            inflater.inflate(R.menu.non_stock_menu, menu);
+        }
 
         return true;
     }
