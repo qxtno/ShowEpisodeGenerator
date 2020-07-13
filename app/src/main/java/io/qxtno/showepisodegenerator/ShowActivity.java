@@ -74,7 +74,7 @@ public class ShowActivity extends AppCompatActivity {
                 } else {
                     show.setFav(false);
                 }
-                dbHelper.updateShow(show);
+                dbHelper.updateFav(show);
             }
         });
     }
