@@ -23,6 +23,10 @@
     <string name="cannot_edit">You cannot edit this show</string>
     <string name="edit_done">You successfully edited this show</string>
     <string name="sort_a_z">Sort</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="light_theme">Light theme</string>
+    <string name="battery_theme">Battery saver theme</string>
+    <string name="system_theme">Use system theme</string>
     <string name="natural_order">Shows sorted in natural order</string>
     <string name="natural_order_reversed">Shows sorted in reversed natural order</string>
     <string name="navigation_draw_open">Open navigation drawer</string>
