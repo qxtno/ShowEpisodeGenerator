@@ -3,6 +3,7 @@ package io.qxtno.showepisodegenerator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +19,8 @@ import androidx.fragment.app.Fragment;
 import java.util.Objects;
 
 public class SettingsFragment extends Fragment {
-    RadioGroup themeGroup;
-    RadioButton radio1;
-    RadioButton radio2;
-    RadioButton radio3;
-    RadioButton radio4;
-    SharedPreferences prefs;
-    SharedPreferences.Editor settingsEditor;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor settingsEditor;
 
     @SuppressLint("CommitPrefEdits")
     @Nullable
@@ -33,33 +29,47 @@ public class SettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.getDefaultNightMode());
-
-        themeGroup = view.findViewById(R.id.radio_group);
-        radio1 = view.findViewById(R.id.radio_light);
-        radio2 = view.findViewById(R.id.radio_dark);
-        radio3 = view.findViewById(R.id.radio_auto_battery_save);
-        radio4 = view.findViewById(R.id.radio_system_theme);
+        RadioGroup themeGroup = view.findViewById(R.id.radio_group);
+        RadioButton radio1 = view.findViewById(R.id.radio_light);
+        RadioButton radio2 = view.findViewById(R.id.radio_dark);
+        RadioButton radio3 = view.findViewById(R.id.radio_auto_battery_save);
+        RadioButton radio4 = view.findViewById(R.id.radio_system_theme);
 
         prefs = Objects.requireNonNull(getActivity()).getSharedPreferences("THEME", Context.MODE_PRIVATE);
 
         boolean r1 = prefs.getBoolean("theme_1", false);
         boolean r2 = prefs.getBoolean("theme_2", false);
-        boolean r3 = prefs.getBoolean("theme_3", false);
-        boolean r4 = prefs.getBoolean("theme_4", false);
-
-        if (r1) {
-            radio1.setChecked(prefs.getBoolean("theme_1", false));
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else if (r2) {
-            radio2.setChecked(prefs.getBoolean("theme_2", false));
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (r3) {
-            radio3.setChecked(prefs.getBoolean("theme_3", false));
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-        } else if (r4) {
-            radio4.setChecked(prefs.getBoolean("theme_4", false));
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        boolean r3;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            radio4.setVisibility(View.VISIBLE);
+            r3 = prefs.getBoolean("theme_3", false);
+            boolean r4 = prefs.getBoolean("theme_4", true);
+            if (r1) {
+                radio1.setChecked(prefs.getBoolean("theme_1", false));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if (r2) {
+                radio2.setChecked(prefs.getBoolean("theme_2", false));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (r3) {
+                radio3.setChecked(prefs.getBoolean("theme_3", false));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+            } else if (r4) {
+                radio4.setChecked(prefs.getBoolean("theme_4", true));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            }
+        }else {
+            radio4.setVisibility(View.GONE);
+            r3 = prefs.getBoolean("theme_3", true);
+            if (r1) {
+                radio1.setChecked(prefs.getBoolean("theme_1", false));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if (r2) {
+                radio2.setChecked(prefs.getBoolean("theme_2", false));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (r3) {
+                radio3.setChecked(prefs.getBoolean("theme_3", true));
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+            }
         }
 
         themeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

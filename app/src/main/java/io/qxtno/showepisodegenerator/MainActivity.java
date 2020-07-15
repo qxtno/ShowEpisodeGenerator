@@ -11,19 +11,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
+    private boolean r1;
+    private boolean r2;
+    private boolean r3;
+    private boolean r4;
 
 
     @Override
@@ -88,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    private void setProperTheme(){
 
        SharedPreferences prefs = getSharedPreferences("THEME", Context.MODE_PRIVATE);
-       boolean r1 = prefs.getBoolean("theme_1", false);
-       boolean r2 = prefs.getBoolean("theme_2", false);
-       boolean r3 = prefs.getBoolean("theme_3", false);
-       boolean r4 = prefs.getBoolean("theme_4", false);
 
        if (r1) {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -102,5 +99,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        } else if (r4) {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
        }
+
+       r1 = prefs.getBoolean("theme_1", false);
+       r2 = prefs.getBoolean("theme_2", false);
+       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+           r3 = prefs.getBoolean("theme_3", false);
+           r4 = prefs.getBoolean("theme_4", true);
+           if (r1) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+           } else if (r2) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+           } else if (r3) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+           } else if (r4) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+           }
+       }else {
+           r3 = prefs.getBoolean("theme_3", true);
+           if (r1) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+           } else if (r2) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+           } else if (r3) {
+               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+           }
+       }
+
     }
 }
