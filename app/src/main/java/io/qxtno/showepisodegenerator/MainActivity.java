@@ -124,6 +124,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
            }
        }
-
     }
 }

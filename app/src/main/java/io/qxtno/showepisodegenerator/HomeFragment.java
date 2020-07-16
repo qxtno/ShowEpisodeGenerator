@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -168,10 +169,15 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(getActivity(), ShowActivity.class);
+        Fragment fragment = new ShowFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("Show item",showList.get(position));
+        fragment.setArguments(bundle);
 
-        intent.putExtra("Show Item", showList.get(position));
-
-        startActivity(intent);
+        assert getFragmentManager() != null;
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container,fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

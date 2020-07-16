@@ -1,8 +1,10 @@
 package io.qxtno.showepisodegenerator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +18,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -42,7 +46,9 @@ public class EditActivity extends AppCompatActivity {
 
         assert show != null;
         editTitle.setText(show.getTitle());
-        editSeasons.setText(Arrays.toString(show.getSeasons()));
+        String seasonsText = Arrays.toString(show.getSeasons());
+        seasonsText = seasonsText.substring(1,seasonsText.length()-1);
+        editSeasons.setText(seasonsText);
         id = show.getId();
 
         editSave.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +75,8 @@ public class EditActivity extends AppCompatActivity {
                 editTitle.setText("");
                 editSeasons.setText("");
                 hideKeyboard();
+                Toast.makeText(getApplicationContext(),R.string.edit_done,Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
@@ -95,6 +103,16 @@ public class EditActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            onBackPressed();
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void hideKeyboard() {

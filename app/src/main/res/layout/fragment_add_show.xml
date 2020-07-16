@@ -9,18 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:hint="@string/title"
-        android:autofillHints="" />
+        android:autofillHints=""
+        />
 
     <EditText
         android:id="@+id/seasons_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="numberDecimal"
         android:hint="@string/seasons"
-        android:autofillHints="" />
+        android:autofillHints=""
+        android:digits="1234567890, "/>
 
     <CheckBox
         android:id="@+id/fav_check_box"

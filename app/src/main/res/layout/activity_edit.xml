@@ -18,7 +18,7 @@
         android:ems="10"
         android:hint="@string/title"
         android:text=""
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords" />
 
     <EditText
         android:id="@+id/activity_edit_seasons"
@@ -28,7 +28,8 @@
         android:ems="10"
         android:hint="@string/seasons"
         android:text=""
-        android:inputType="textPersonName" />
+        android:inputType="numberDecimal"
+        android:digits="01234567890, "/>
 
     <Button
         android:id="@+id/activity_edit_save"
