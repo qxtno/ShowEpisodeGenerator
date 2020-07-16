@@ -18,6 +18,11 @@
     <string name="delete">Delete show</string>
     <string name="edit">Edit show</string>
     <string name="save">Save</string>
+    <string name="help">Help</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="how_to_add">How to add a show</string>
+    <string name="how_to_edit">How to edit a show</string>
+    <string name="add_edit_message">Title field is a place for show\'s title, in seasons field you should type count of episodes per season. For example if a show has 2 seasons, and it has 22 episodes in first season and 24 in second you should write \'22,24\'. You always have to separate seasons by comma.</string>
     <string name="cannot_delete">You can only delete custom added shows</string>
     <string name="delete_done">You successfully deleted show</string>
     <string name="cannot_edit">You cannot edit this show</string>

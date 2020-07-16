@@ -6,11 +6,14 @@
     android:orientation="vertical"
     tools:context=".EditActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <EditText
         android:id="@+id/activity_edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/title"
@@ -21,7 +24,6 @@
         android:id="@+id/activity_edit_seasons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/seasons"
@@ -32,6 +34,5 @@
         android:id="@+id/activity_edit_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
         android:text="@string/save" />
 </LinearLayout>
