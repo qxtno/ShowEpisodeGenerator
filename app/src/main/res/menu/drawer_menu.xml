@@ -24,8 +24,12 @@
             android:icon="@drawable/ic_info"
             android:title="@string/about"/>
         <item
-            android:id="@+id/con_show"
-            android:title="@string/add_new"
+            android:id="@+id/gen_show"
+            android:title="@string/show"
+            android:visible="false"/>
+        <item
+            android:id="@+id/edit_show"
+            android:title="@string/edit"
             android:visible="false"/>
     </group>
 </menu>

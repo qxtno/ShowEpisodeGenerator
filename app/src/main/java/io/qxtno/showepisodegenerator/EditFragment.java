@@ -1,59 +1,59 @@
 package io.qxtno.showepisodegenerator;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.util.Arrays;
-import java.util.Objects;
 
-public class EditActivity extends AppCompatActivity {
+public class EditFragment extends Fragment {
 
-    ShowDBHelper dbHelper = new ShowDBHelper(this);
+    ShowDBHelper dbHelper;
     int id;
+    Show show;
+    View view;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        view = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Intent intent = getIntent();
-        Show show = intent.getParcelableExtra("Show Item Edit");
-
-        final EditText editTitle = findViewById(R.id.activity_edit_title);
-        final EditText editSeasons = findViewById(R.id.activity_edit_seasons);
-        Button editSave = findViewById(R.id.activity_edit_save);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            show = bundle.getParcelable("show");
+        }
+        final EditText editTitle = view.findViewById(R.id.activity_edit_title);
+        final EditText editSeasons = view.findViewById(R.id.activity_edit_seasons);
+        Button editSave = view.findViewById(R.id.activity_edit_save);
 
         assert show != null;
         editTitle.setText(show.getTitle());
         String seasonsText = Arrays.toString(show.getSeasons());
-        seasonsText = seasonsText.substring(1,seasonsText.length()-1);
+        seasonsText = seasonsText.substring(1, seasonsText.length() - 1);
         editSeasons.setText(seasonsText);
         id = show.getId();
 
         editSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dbHelper = new ShowDBHelper(getActivity());
                 Show show1 = dbHelper.getShow(id);
                 show1.setTitle(editTitle.getText().toString());
 
@@ -75,23 +75,25 @@ public class EditActivity extends AppCompatActivity {
                 editTitle.setText("");
                 editSeasons.setText("");
                 hideKeyboard();
-                Toast.makeText(getApplicationContext(),R.string.edit_done,Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(requireContext(), R.string.edit_done, Toast.LENGTH_SHORT).show();
+                requireActivity().onBackPressed();
             }
         });
+
+        setHasOptionsMenu(true);
+        return view;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.new_show_menu, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.new_edit_show_menu, menu);
 
         MenuItem help = menu.findItem(R.id.menu_help);
 
         help.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.help).setMessage(R.string.add_edit_message).setNeutralButton(R.string.dismiss, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -102,21 +104,13 @@ public class EditActivity extends AppCompatActivity {
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
-            onBackPressed();
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) Objects.requireNonNull(this.getSystemService(Context.INPUT_METHOD_SERVICE));
-        inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
+        final InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
     }
 }

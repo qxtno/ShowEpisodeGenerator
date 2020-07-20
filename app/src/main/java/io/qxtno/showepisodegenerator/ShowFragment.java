@@ -1,6 +1,5 @@
 package io.qxtno.showepisodegenerator;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Random;
 
 public class ShowFragment extends Fragment {
@@ -42,7 +41,7 @@ public class ShowFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            show = bundle.getParcelable("Show item");
+            show = bundle.getParcelable("show");
         }
 
         assert show != null;
@@ -78,7 +77,7 @@ public class ShowFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowDBHelper dbHelper = new ShowDBHelper(Objects.requireNonNull(getActivity()).getApplicationContext());
+                ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
                 if (!show.isFav()) {
                     show.setFav(true);
                 } else {
@@ -89,7 +88,6 @@ public class ShowFragment extends Fragment {
         });
 
         setHasOptionsMenu(true);
-
         return view;
     }
 
@@ -102,11 +100,10 @@ public class ShowFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (show.isCustom()) {
-                        Intent intent = new Intent(getActivity(), EditActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("show", show);
 
-                        intent.putExtra("Show Item Edit", show);
-
-                        startActivity(intent);
+                        Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(R.id.editFragment, bundle);
 
                         return true;
                     } else {
@@ -121,9 +118,9 @@ public class ShowFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (show.isCustom()) {
-                        ShowDBHelper dbHelper = new ShowDBHelper(Objects.requireNonNull(getActivity()).getApplicationContext());
+                        ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
                         dbHelper.deleteShow(show);
-                        getActivity().onBackPressed();
+                        requireActivity().onBackPressed();
                         Toast.makeText(getActivity(), R.string.delete_done, Toast.LENGTH_SHORT).show();
                         return true;
                     } else {
@@ -146,7 +143,7 @@ public class ShowFragment extends Fragment {
     }
 
     private void setUpGen() {
-        ShowDBHelper dbHelper = new ShowDBHelper(Objects.requireNonNull(getActivity()).getApplicationContext());
+        ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
         show = dbHelper.getShow(id);
         assert show != null;
         title = show.getTitle();

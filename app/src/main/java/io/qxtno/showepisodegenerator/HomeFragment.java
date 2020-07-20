@@ -1,7 +1,6 @@
 package io.qxtno.showepisodegenerator;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +26,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickListener {
 
@@ -45,12 +43,12 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
         ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
 
-        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
 
         if (firstStart) {
             Gson gson = new Gson();
-            String jsonString = JsonHelper.getJsonFromAssets(Objects.requireNonNull(getActivity()).getApplicationContext());
+            String jsonString = JsonHelper.getJsonFromAssets(requireActivity().getApplicationContext());
 
             Type type = new TypeToken<ArrayList<Show>>() {
             }.getType();
@@ -62,7 +60,7 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
                 dbHelper.addShow(show);
             }
 
-            preferences = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.putBoolean("firstStart", false);
             editor.apply();
@@ -86,12 +84,12 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
     }
 
     private void sortInit() {
-        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences",Context.MODE_PRIVATE);
-        sorted = preferences.getBoolean("sorted",true);
+        preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        sorted = preferences.getBoolean("sorted", true);
 
-        if(sorted){
+        if (sorted) {
             sort();
-        }else {
+        } else {
             sortReverse();
         }
     }
@@ -105,7 +103,7 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         });
     }
 
-    private void sortReverse(){
+    private void sortReverse() {
         Collections.sort(showList, new Comparator<Show>() {
             @Override
             public int compare(Show s1, Show s2) {
@@ -114,20 +112,20 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
         });
     }
 
-    private void sortList(){
-        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("preferences",Context.MODE_PRIVATE);
-        sorted = preferences.getBoolean("sorted",true);
+    private void sortList() {
+        preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        sorted = preferences.getBoolean("sorted", true);
         editor = preferences.edit();
-        if(sorted){
+        if (sorted) {
             sortReverse();
             editor.putBoolean("sorted", false);
-            sorted = preferences.getBoolean("sorted",false);
-            Toast.makeText(getActivity(),R.string.natural_order_reversed,Toast.LENGTH_SHORT).show();
-        }else{
+            sorted = preferences.getBoolean("sorted", false);
+            Toast.makeText(getActivity(), R.string.natural_order_reversed, Toast.LENGTH_SHORT).show();
+        } else {
             sort();
             editor.putBoolean("sorted", true);
-            sorted = preferences.getBoolean("sorted",true);
-            Toast.makeText(getActivity(),R.string.natural_order,Toast.LENGTH_SHORT).show();
+            sorted = preferences.getBoolean("sorted", true);
+            Toast.makeText(getActivity(), R.string.natural_order, Toast.LENGTH_SHORT).show();
         }
         editor.apply();
         mAdapter.notifyDataSetChanged();
@@ -169,15 +167,9 @@ public class HomeFragment extends Fragment implements ShowAdapter.OnItemClickLis
 
     @Override
     public void onItemClick(int position) {
-        Fragment fragment = new ShowFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("Show item",showList.get(position));
-        fragment.setArguments(bundle);
+        bundle.putParcelable("show", showList.get(position));
 
-        assert getFragmentManager() != null;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container,fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(R.id.showFragment, bundle);
     }
 }

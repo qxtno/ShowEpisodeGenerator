@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
-
 public class NewShowFragment extends Fragment {
     EditText titleEditText;
     EditText seasonsEditText;
@@ -77,7 +75,7 @@ public class NewShowFragment extends Fragment {
 
                 titleEditText.setText("");
                 seasonsEditText.setText("");
-                hideKeyboard(view);
+                hideKeyboard();
                 favCheckBox.setChecked(false);
 
                 Toast.makeText(getActivity(), R.string.added, Toast.LENGTH_SHORT).show();
@@ -89,15 +87,15 @@ public class NewShowFragment extends Fragment {
         return view;
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert inputMethodManager != null;
-        inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+    private void hideKeyboard() {
+        final InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.new_show_menu, menu);
+        inflater.inflate(R.menu.new_edit_show_menu, menu);
 
         MenuItem help = menu.findItem(R.id.menu_help);
 

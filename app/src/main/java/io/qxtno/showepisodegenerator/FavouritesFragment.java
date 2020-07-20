@@ -1,7 +1,6 @@
 package io.qxtno.showepisodegenerator;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,14 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class FavouritesFragment extends Fragment implements FavouritesAdapter.OnItemClickListener {
     private FavouritesAdapter mAdapter;
@@ -57,7 +55,7 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
     }
 
     private void sortInit() {
-        prefs = Objects.requireNonNull(getContext()).getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         sortedFav = prefs.getBoolean("sortedFav", true);
 
         if (sortedFav) {
@@ -86,7 +84,7 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
     }
 
     private void sortList() {
-        prefs = Objects.requireNonNull(getContext()).getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         sortedFav = prefs.getBoolean("sortedFav", true);
         SharedPreferences.Editor editor = prefs.edit();
         if (sortedFav) {
@@ -138,15 +136,9 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
 
     @Override
     public void onItemClick(int position) {
-        Fragment fragment = new ShowFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("Show item",showFavListDB.get(position));
-        fragment.setArguments(bundle);
+        bundle.putParcelable("show", showFavListDB.get(position));
 
-        assert getFragmentManager() != null;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container,fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(R.id.showFragment, bundle);
     }
 }

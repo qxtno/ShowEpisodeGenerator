@@ -1,13 +1,16 @@
 package io.qxtno.showepisodegenerator;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,14 +21,16 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
     private boolean r1;
     private boolean r2;
     private boolean r3;
     private boolean r4;
-
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +42,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_draw_open, R.string.navigation_draw_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
+
+        init();
+    }
+
+    private void init() {
+        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+        NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        }
     }
 
     @Override
@@ -67,62 +73,100 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_graph, true)
+                        .build();
+                Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.homeFragment, null, navOptions);
                 break;
             case R.id.nav_fav:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavouritesFragment()).commit();
+                if (isValidDestination()) {
+                    Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.favouritesFragment);
+                }
+
                 break;
             case R.id.nav_add_show:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NewShowFragment()).commit();
+                if (isValidDestination()) {
+                    Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.newShowFragment);
+                }
+
                 break;
             case R.id.nav_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                if (isValidDestination()) {
+                    Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.settingsFragment);
+                }
+
                 break;
             case R.id.nav_about:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
+                if (isValidDestination()) {
+                    Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.aboutFragment);
+                }
+
                 break;
         }
+        item.setChecked(true);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-   private void setProperTheme(){
+    private boolean isValidDestination() {
+        return R.id.favouritesFragment != Objects.requireNonNull(Navigation.findNavController(this, R.id.fragment_container).getCurrentDestination()).getId();
+    }
 
-       SharedPreferences prefs = getSharedPreferences("THEME", Context.MODE_PRIVATE);
+    private void setProperTheme() {
 
-       if (r1) {
-           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-       } else if (r2) {
-           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-       } else if (r3) {
-           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-       } else if (r4) {
-           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-       }
+        SharedPreferences prefs = getSharedPreferences("THEME", Context.MODE_PRIVATE);
 
-       r1 = prefs.getBoolean("theme_1", false);
-       r2 = prefs.getBoolean("theme_2", false);
-       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-           r3 = prefs.getBoolean("theme_3", false);
-           r4 = prefs.getBoolean("theme_4", true);
-           if (r1) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-           } else if (r2) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-           } else if (r3) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-           } else if (r4) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-           }
-       }else {
-           r3 = prefs.getBoolean("theme_3", true);
-           if (r1) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-           } else if (r2) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-           } else if (r3) {
-               AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-           }
-       }
+        if (r1) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (r2) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (r3) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+        } else if (r4) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+
+        r1 = prefs.getBoolean("theme_1", false);
+        r2 = prefs.getBoolean("theme_2", false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            r3 = prefs.getBoolean("theme_3", false);
+            r4 = prefs.getBoolean("theme_4", true);
+            if (r1) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if (r2) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (r3) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+            } else if (r4) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            }
+        } else {
+            r3 = prefs.getBoolean("theme_3", true);
+            if (r1) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if (r2) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (r3) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+            }
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.fragment_container), drawerLayout);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
