@@ -29,6 +29,7 @@
     <string name="edit_done">You successfully edited this show</string>
     <string name="sort_a_z">Sort</string>
     <string name="show">Show</string>
+    <string name="list">Show list</string>
     <string name="dark_theme">Dark theme</string>
     <string name="light_theme">Light theme</string>
     <string name="battery_theme">Battery saver theme</string>

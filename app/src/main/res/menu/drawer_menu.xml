@@ -8,6 +8,11 @@
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
         <item
+            android:id="@+id/nav_list"
+            android:icon="@drawable/ic_list"
+            android:title="@string/list"
+            />
+        <item
             android:id="@+id/nav_fav"
             android:icon="@drawable/ic_favorite"
             android:title="@string/fav" />

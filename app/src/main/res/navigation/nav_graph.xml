@@ -3,41 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment"
-    tools:ignore="UnusedNavigation">
+    tools:ignore="UnusedNavigation"
+    app:startDestination="@id/homeFragment">
+
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="io.qxtno.showepisodegenerator.HomeFragment"
         android:label="HomeFragment" >
         <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_newShowFragment"
-            app:destination="@id/newShowFragment" />
+            android:id="@+id/action_homeFragment_to_showListFragment"
+            app:destination="@id/showListFragment" />
         <action
             android:id="@+id/action_homeFragment_to_favouritesFragment"
             app:destination="@id/favouritesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_showFragment"
-            app:destination="@id/showFragment" />
+            android:id="@+id/action_homeFragment_to_newShowFragment"
+            app:destination="@id/newShowFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
-        android:id="@+id/aboutFragment"
-        android:name="io.qxtno.showepisodegenerator.AboutFragment"
-        android:label="AboutFragment" />
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="io.qxtno.showepisodegenerator.SettingsFragment"
-        android:label="SettingsFragment" />
-    <fragment
-        android:id="@+id/newShowFragment"
-        android:name="io.qxtno.showepisodegenerator.NewShowFragment"
-        android:label="NewShowFragment" />
+        android:id="@+id/showListFragment"
+        android:name="io.qxtno.showepisodegenerator.ShowListFragment"
+        android:label="ShowListFragment" >
+        <action
+            android:id="@+id/action_showListFragment_to_showFragment"
+            app:destination="@id/showFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="io.qxtno.showepisodegenerator.FavouritesFragment"
@@ -47,12 +47,21 @@
             app:destination="@id/showFragment" />
     </fragment>
     <fragment
+        android:id="@+id/newShowFragment"
+        android:name="io.qxtno.showepisodegenerator.NewShowFragment"
+        android:label="NewShowFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="io.qxtno.showepisodegenerator.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="io.qxtno.showepisodegenerator.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
         android:id="@+id/showFragment"
         android:name="io.qxtno.showepisodegenerator.ShowFragment"
         android:label="ShowFragment" >
-        <argument
-            android:name="show"
-            app:argType="io.qxtno.showepisodegenerator.Show" />
         <action
             android:id="@+id/action_showFragment_to_editFragment"
             app:destination="@id/editFragment" />
@@ -60,9 +69,5 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="io.qxtno.showepisodegenerator.EditFragment"
-        android:label="EditFragment" >
-        <argument
-            android:name="show"
-            app:argType="io.qxtno.showepisodegenerator.Show" />
-    </fragment>
+        android:label="EditFragment" />
 </navigation>

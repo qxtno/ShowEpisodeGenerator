@@ -78,26 +78,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .build();
                 Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.homeFragment, null, navOptions);
                 break;
+            case R.id.nav_list:
+                if (isValidDestination(R.id.nav_list)) {
+                    Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.showListFragment);
+                }
+                break;
             case R.id.nav_fav:
-                if (isValidDestination()) {
+                if (isValidDestination(R.id.nav_fav)) {
                     Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.favouritesFragment);
                 }
 
                 break;
             case R.id.nav_add_show:
-                if (isValidDestination()) {
+                if (isValidDestination(R.id.nav_add_show)) {
                     Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.newShowFragment);
                 }
 
                 break;
             case R.id.nav_settings:
-                if (isValidDestination()) {
+                if (isValidDestination(R.id.nav_settings)) {
                     Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.settingsFragment);
                 }
 
                 break;
             case R.id.nav_about:
-                if (isValidDestination()) {
+                if (isValidDestination( R.id.nav_about)) {
                     Navigation.findNavController(this, R.id.fragment_container).navigate(R.id.aboutFragment);
                 }
 
@@ -108,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private boolean isValidDestination() {
-        return R.id.favouritesFragment != Objects.requireNonNull(Navigation.findNavController(this, R.id.fragment_container).getCurrentDestination()).getId();
+    private boolean isValidDestination(int designation) {
+        return designation!= Objects.requireNonNull(Navigation.findNavController(this, R.id.fragment_container).getCurrentDestination()).getId();
     }
 
     private void setProperTheme() {
