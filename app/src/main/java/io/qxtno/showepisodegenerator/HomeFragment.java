@@ -1,10 +1,15 @@
 package io.qxtno.showepisodegenerator;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,7 +18,15 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import java.util.Arrays;
+
 public class HomeFragment extends Fragment {
+
+    private SharedPreferences prefs;
+    private int id;
+    private Show show;
+
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -21,10 +34,42 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         CardView lastShowcard = view.findViewById(R.id.last_show);
+
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        id = prefs.getInt("id", -1);
+
+        if (id != -1) {
+            ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
+            show = dbHelper.getShow(id);
+            String seasonString = Arrays.toString(show.getSeasons());
+            String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
+            int[] seasons = new int[items.length];
+
+            for (int i = 0; i < items.length; i++) {
+                try {
+                    seasons[i] = Integer.parseInt(items[i]);
+                } catch (NumberFormatException nfe) {
+                    Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                }
+            }
+            show.setSeasons(seasons);
+
+            TextView homeResults = view.findViewById(R.id.home_title_results);
+            homeResults.setText(show.getTitle()+"\n\n"+"result");
+        }
+
         lastShowcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireActivity(),"Test",Toast.LENGTH_SHORT).show();
+
+                if (id == -1) {
+                    Toast.makeText(requireActivity(), "Test", Toast.LENGTH_SHORT).show();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("show", show);
+
+                    Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(R.id.showFragment, bundle);
+                }
             }
         });
 

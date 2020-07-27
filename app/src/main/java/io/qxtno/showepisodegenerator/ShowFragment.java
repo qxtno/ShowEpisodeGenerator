@@ -1,5 +1,8 @@
 package io.qxtno.showepisodegenerator;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +35,8 @@ public class ShowFragment extends Fragment {
     String title;
     TextView resultTextView;
     TextView titleTextView;
+    SharedPreferences prefs;
+    int homeId;
 
     @Nullable
     @Override
@@ -86,6 +91,12 @@ public class ShowFragment extends Fragment {
                 dbHelper.updateFav(show);
             }
         });
+
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        homeId = prefs.getInt("id", -1);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("id",id);
+        editor.apply();
 
         setHasOptionsMenu(true);
         return view;
