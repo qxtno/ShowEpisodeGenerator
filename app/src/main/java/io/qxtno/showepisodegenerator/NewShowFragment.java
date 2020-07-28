@@ -23,10 +23,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class NewShowFragment extends Fragment {
-    EditText titleEditText;
-    EditText seasonsEditText;
-    Button addShow;
-    CheckBox favCheckBox;
+    private EditText titleEditText;
+    private EditText seasonsEditText;
+    private CheckBox favCheckBox;
 
 
     @Nullable
@@ -39,7 +38,7 @@ public class NewShowFragment extends Fragment {
 
         titleEditText = view.findViewById(R.id.title_edit_text);
         seasonsEditText = view.findViewById(R.id.seasons_edit_text);
-        addShow = view.findViewById(R.id.add_new_show);
+        Button addShow = view.findViewById(R.id.add_new_show);
         favCheckBox = view.findViewById(R.id.fav_check_box);
 
         addShow.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +78,8 @@ public class NewShowFragment extends Fragment {
                 favCheckBox.setChecked(false);
 
                 Toast.makeText(getActivity(), R.string.added, Toast.LENGTH_SHORT).show();
+
+                requireActivity().onBackPressed();
             }
         });
 

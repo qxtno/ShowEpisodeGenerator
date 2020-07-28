@@ -24,16 +24,15 @@ import java.util.Arrays;
 
 public class EditFragment extends Fragment {
 
-    ShowDBHelper dbHelper;
-    int id;
-    Show show;
-    View view;
+    private ShowDBHelper dbHelper;
+    private int id;
+    private Show show;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

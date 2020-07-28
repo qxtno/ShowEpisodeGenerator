@@ -15,7 +15,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ShowViewHolder
     private Context mContext;
     private ArrayList<Show> showArrayList;
     private ArrayList<Show> showArrayListFull;
-    ArrayList<Show> filteredList = new ArrayList<>();
+    private ArrayList<Show> filteredList = new ArrayList<>();
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {

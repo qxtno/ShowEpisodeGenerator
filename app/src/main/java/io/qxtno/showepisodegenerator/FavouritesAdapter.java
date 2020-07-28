@@ -16,7 +16,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     private Context mContext;
     private ArrayList<Show> favArrayList;
     private ArrayList<Show> favListFull;
-    ArrayList<Show> filteredList = new ArrayList<>();
+    private ArrayList<Show> filteredList = new ArrayList<>();
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
