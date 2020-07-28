@@ -22,7 +22,6 @@ import java.util.Arrays;
 
 public class HomeFragment extends Fragment {
 
-    private SharedPreferences prefs;
     private int id;
     private Show show;
 
@@ -32,10 +31,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        SharedPreferences prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
-        CardView lastShowcard = view.findViewById(R.id.last_show);
+        CardView lastShowCard = view.findViewById(R.id.last_show);
 
-        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         id = prefs.getInt("id", -1);
 
         if (id != -1) {
@@ -55,10 +54,12 @@ public class HomeFragment extends Fragment {
             show.setSeasons(seasons);
 
             TextView homeResults = view.findViewById(R.id.home_title_results);
-            homeResults.setText(show.getTitle()+"\n\n"+"result");
+
+            String result = prefs.getString("resultString", "result will appear here");
+            homeResults.setText(show.getTitle() + "\n\n" + result);
         }
 
-        lastShowcard.setOnClickListener(new View.OnClickListener() {
+        lastShowCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

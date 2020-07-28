@@ -1,6 +1,5 @@
 package io.qxtno.showepisodegenerator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,18 +24,15 @@ import java.util.Random;
 
 public class ShowFragment extends Fragment {
 
-    Button randomize;
-    View view;
-    Show show;
-    int id;
-    int randomEpisode;
-    int randomSeason;
-    int[] seasons;
-    String title;
-    TextView resultTextView;
-    TextView titleTextView;
-    SharedPreferences prefs;
-    int homeId;
+    private View view;
+    private Show show;
+    private int id;
+    private int randomEpisode;
+    private int randomSeason;
+    private int[] seasons;
+    private TextView resultTextView;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
 
     @Nullable
     @Override
@@ -44,39 +40,16 @@ public class ShowFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.fragment_show, container, false);
 
+        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             show = bundle.getParcelable("show");
         }
-
         assert show != null;
-        title = show.getTitle();
-        seasons = show.getSeasons();
         id = show.getId();
 
-        titleTextView = view.findViewById(R.id.frag_title);
-        titleTextView.setText(title);
-
-        randomize = view.findViewById(R.id.frag_random);
-
-        randomize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Random generator = new Random();
-                assert seasons != null;
-                randomSeason = generator.nextInt(seasons.length) + 1;
-                randomEpisode = generator.nextInt(seasons[randomSeason - 1]) + 1;
-                String space = " ";
-
-                String episodeInfo = getResources().getString(R.string.se) +
-                        randomSeason +
-                        space +
-                        getResources().getString(R.string.ep) +
-                        randomEpisode;
-                resultTextView = view.findViewById(R.id.frag_result);
-                resultTextView.setText(episodeInfo);
-            }
-        });
+        setUpGen();
 
         Button add = view.findViewById(R.id.frag_add_to_fav);
         add.setOnClickListener(new View.OnClickListener() {
@@ -92,11 +65,8 @@ public class ShowFragment extends Fragment {
             }
         });
 
-        prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        homeId = prefs.getInt("id", -1);
-        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("id",id);
-        editor.apply();
+        editor = prefs.edit();
+        editor.putInt("id", id).apply();
 
         setHasOptionsMenu(true);
         return view;
@@ -157,11 +127,11 @@ public class ShowFragment extends Fragment {
         ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
         show = dbHelper.getShow(id);
         assert show != null;
-        title = show.getTitle();
+        String title = show.getTitle();
         seasons = show.getSeasons();
         id = show.getId();
 
-        titleTextView = view.findViewById(R.id.frag_title);
+        TextView titleTextView = view.findViewById(R.id.frag_title);
         titleTextView.setText(title);
 
         String seasonString = Arrays.toString(show.getSeasons());
@@ -177,7 +147,7 @@ public class ShowFragment extends Fragment {
         }
         show.setSeasons(seasons);
 
-        randomize = view.findViewById(R.id.frag_random);
+        Button randomize = view.findViewById(R.id.frag_random);
 
         randomize.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +164,10 @@ public class ShowFragment extends Fragment {
                         randomEpisode;
                 resultTextView = view.findViewById(R.id.frag_result);
                 resultTextView.setText(episodeInfo);
+
+                editor = prefs.edit();
+                String resultString = "S" + randomSeason + " E" + randomEpisode;
+                editor.putString("resultString", resultString).apply();
             }
         });
     }
