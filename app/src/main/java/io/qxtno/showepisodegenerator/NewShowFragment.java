@@ -45,41 +45,49 @@ public class NewShowFragment extends Fragment {
             @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                show.setTitle(titleEditText.getText().toString());
+                if (!titleEditText.getText().toString().equals("") && !seasonsEditText.getText().toString().equals("")) {
+                    show.setTitle(titleEditText.getText().toString());
 
-                String seasonString = seasonsEditText.getText().toString();
-                String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
-                int[] seasons = new int[items.length];
+                    String seasonString = seasonsEditText.getText().toString();
+                    String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
+                    int[] seasons = new int[items.length];
 
-                for (int i = 0; i < items.length; i++) {
-                    try {
-                        seasons[i] = Integer.parseInt(items[i]);
-                    } catch (NumberFormatException nfe) {
-                        Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                    for (int i = 0; i < items.length; i++) {
+                        try {
+                            seasons[i] = Integer.parseInt(items[i]);
+                        } catch (NumberFormatException nfe) {
+                            Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                        }
                     }
-                }
-                show.setSeasons(seasons);
+                    show.setSeasons(seasons);
 
-                boolean checked = favCheckBox.isChecked();
+                    boolean checked = favCheckBox.isChecked();
 
-                if (checked) {
-                    show.setFav(true);
+                    if (checked) {
+                        show.setFav(true);
+                    } else {
+                        show.setFav(false);
+                    }
+                    show.setCustom(true);
+
+                    ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
+                    dbHelper.addShow(show);
+
+                    titleEditText.setText("");
+                    seasonsEditText.setText("");
+                    hideKeyboard();
+                    favCheckBox.setChecked(false);
+
+                    Toast.makeText(getActivity(), R.string.added, Toast.LENGTH_SHORT).show();
+
+                    requireActivity().onBackPressed();
+                } else if (!titleEditText.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.season_empty, Toast.LENGTH_SHORT).show();
+                } else if (!seasonsEditText.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.title_empty, Toast.LENGTH_SHORT).show();
                 } else {
-                    show.setFav(false);
+                    Toast.makeText(requireActivity(), R.string.all_empty, Toast.LENGTH_SHORT).show();
                 }
-                show.setCustom(true);
-
-                ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
-                dbHelper.addShow(show);
-
-                titleEditText.setText("");
-                seasonsEditText.setText("");
-                hideKeyboard();
-                favCheckBox.setChecked(false);
-
-                Toast.makeText(getActivity(), R.string.added, Toast.LENGTH_SHORT).show();
-
-                requireActivity().onBackPressed();
             }
         });
 

@@ -52,30 +52,39 @@ public class EditFragment extends Fragment {
         editSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper = new ShowDBHelper(getActivity());
-                Show show1 = dbHelper.getShow(id);
-                show1.setTitle(editTitle.getText().toString());
+                if (!editTitle.getText().toString().equals("") && !editSeasons.getText().toString().equals("")) {
+                    dbHelper = new ShowDBHelper(getActivity());
+                    Show show1 = dbHelper.getShow(id);
+                    show1.setTitle(editTitle.getText().toString());
 
-                String seasonString = editSeasons.getText().toString();
-                String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
-                int[] seasons = new int[items.length];
+                    String seasonString = editSeasons.getText().toString();
+                    String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
+                    int[] seasons = new int[items.length];
 
-                for (int i = 0; i < items.length; i++) {
-                    try {
-                        seasons[i] = Integer.parseInt(items[i]);
-                    } catch (NumberFormatException nfe) {
-                        Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                    for (int i = 0; i < items.length; i++) {
+                        try {
+                            seasons[i] = Integer.parseInt(items[i]);
+                        } catch (NumberFormatException nfe) {
+                            Log.i("To Array Error DBHelper", "Error while parsing string into an array");
+                        }
                     }
+                    show1.setSeasons(seasons);
+
+                    dbHelper.updateShow(show1);
+
+                    editTitle.setText("");
+                    editSeasons.setText("");
+                    hideKeyboard();
+                    Toast.makeText(requireContext(), R.string.edit_done, Toast.LENGTH_SHORT).show();
+                    requireActivity().onBackPressed();
+
+                } else if (!editTitle.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.season_empty, Toast.LENGTH_SHORT).show();
+                } else if (!editSeasons.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.title_empty, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireActivity(), R.string.all_empty, Toast.LENGTH_SHORT).show();
                 }
-                show1.setSeasons(seasons);
-
-                dbHelper.updateShow(show1);
-
-                editTitle.setText("");
-                editSeasons.setText("");
-                hideKeyboard();
-                Toast.makeText(requireContext(), R.string.edit_done, Toast.LENGTH_SHORT).show();
-                requireActivity().onBackPressed();
             }
         });
 
