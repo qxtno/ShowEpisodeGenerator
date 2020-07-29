@@ -31,12 +31,15 @@
     <string name="show">Show</string>
     <string name="list">Show list</string>
     <string name="latest_show">Latest Show</string>
+    <string name="show_appear">The show will appear here</string>
+    <string name="no_show">You haven\'t selected any show yet</string>
     <string name="dark_theme">Dark theme</string>
     <string name="light_theme">Light theme</string>
     <string name="battery_theme">Battery saver theme</string>
     <string name="system_theme">Use system theme</string>
     <string name="natural_order">Shows sorted in natural order</string>
     <string name="natural_order_reversed">Shows sorted in reversed natural order</string>
-    <string name="navigation_draw_open">Open navigation drawer</string>
-    <string name="navigation_draw_close">Close navigation drawer</string>
+    <string name="title_empty">Title field cannot be empty</string>
+    <string name="season_empty">Seasons field cannot be empty</string>
+    <string name="all_empty">Title and seasons fields cannot be empty</string>
 </resources>

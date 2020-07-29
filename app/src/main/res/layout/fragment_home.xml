@@ -36,7 +36,7 @@
                     style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Title\n\n test" />
+                    android:text="" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

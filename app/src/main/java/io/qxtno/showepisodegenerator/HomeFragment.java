@@ -37,6 +37,9 @@ public class HomeFragment extends Fragment {
 
         id = prefs.getInt("id", -1);
 
+        TextView homeResults = view.findViewById(R.id.home_title_results);
+        homeResults.setText(R.string.show_appear);
+
         if (id != -1) {
             ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
             show = dbHelper.getShow(id);
@@ -53,9 +56,8 @@ public class HomeFragment extends Fragment {
             }
             show.setSeasons(seasons);
 
-            TextView homeResults = view.findViewById(R.id.home_title_results);
+            String result = prefs.getString("resultString", "Result will appear here");
 
-            String result = prefs.getString("resultString", "result will appear here");
             homeResults.setText(show.getTitle() + "\n\n" + result);
         }
 
@@ -64,7 +66,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
 
                 if (id == -1) {
-                    Toast.makeText(requireActivity(), "Test", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), R.string.no_show, Toast.LENGTH_SHORT).show();
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("show", show);
