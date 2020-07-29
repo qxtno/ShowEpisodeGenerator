@@ -149,6 +149,9 @@ public class ShowFragment extends Fragment {
 
         Button randomize = view.findViewById(R.id.frag_random);
 
+        editor = prefs.edit();
+        editor.putString("resultString", "Result will appear here").apply();
+
         randomize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
