@@ -74,6 +74,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 Log.i("To Array Error DBHelper", "Error while parsing string into an array");
             }
         }
+        mDatabase.close();
         return new Show(Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1), seasons, cursor.getInt(3) == 1, cursor.getInt(4) == 1);
     }
@@ -86,17 +87,19 @@ public class ShowDBHelper extends SQLiteOpenHelper {
 
         mDatabase.update(ShowEntry.TABLE_NAME, contentValues, ShowEntry.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(show.getId())});
+        mDatabase.close();
     }
 
     public void updateShow(Show show) {
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(ShowEntry.COLUMN_TITLE,show.getTitle());
+        contentValues.put(ShowEntry.COLUMN_TITLE, show.getTitle());
         contentValues.put(ShowEntry.COLUMN_SEASONS, Arrays.toString(show.getSeasons()));
 
         mDatabase.update(ShowEntry.TABLE_NAME, contentValues, ShowEntry.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(show.getId())});
+        mDatabase.close();
     }
 
     public List<Show> getAllShows() {
@@ -127,6 +130,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 showList.add(show);
             } while (cursor.moveToNext());
         }
+        mDatabase.close();
         return showList;
     }
 
@@ -161,6 +165,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 }
             } while (cursor.moveToNext());
         }
+        mDatabase.close();
         return showList;
     }
 

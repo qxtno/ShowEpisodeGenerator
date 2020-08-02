@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
             }
             show.setSeasons(seasons);
 
-            String result = prefs.getString("resultString", "Result will appear here");
+            String result = prefs.getString("resultString", String.valueOf(R.string.result_here));
 
             homeResults.setText(show.getTitle() + "\n\n" + result);
         }

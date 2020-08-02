@@ -34,7 +34,9 @@ public class ShowFragment extends Fragment {
     private TextView resultTextView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+    private String episodeInfo;
 
+    @SuppressLint("ResourceType")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -135,6 +137,9 @@ public class ShowFragment extends Fragment {
         TextView titleTextView = view.findViewById(R.id.frag_title);
         titleTextView.setText(title);
 
+        resultTextView = view.findViewById(R.id.frag_result);
+        resultTextView.setText(R.string.result_here);
+
         String seasonString = Arrays.toString(show.getSeasons());
         String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
         seasons = new int[items.length];
@@ -161,12 +166,11 @@ public class ShowFragment extends Fragment {
                 randomEpisode = generator.nextInt(seasons[randomSeason - 1]) + 1;
                 String space = " ";
 
-                String episodeInfo = getResources().getString(R.string.se) +
+                episodeInfo = getResources().getString(R.string.se) +
                         randomSeason +
                         space +
                         getResources().getString(R.string.ep) +
                         randomEpisode;
-                resultTextView = view.findViewById(R.id.frag_result);
                 resultTextView.setText(episodeInfo);
 
                 editor = prefs.edit();
@@ -174,5 +178,23 @@ public class ShowFragment extends Fragment {
                 editor.putString("resultString", resultString).apply();
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("results",episodeInfo);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null){
+            episodeInfo = savedInstanceState.getString("results");
+        }
+
+        resultTextView = view.findViewById(R.id.frag_result);
+        resultTextView.setText(episodeInfo);
     }
 }

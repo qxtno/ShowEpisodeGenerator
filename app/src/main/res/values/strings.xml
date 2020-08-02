@@ -43,4 +43,5 @@
     <string name="season_empty">Seasons field cannot be empty</string>
     <string name="all_empty">Title and seasons fields cannot be empty</string>
     <string name="theme_sett">Theme chooser</string>
+    <string name="result_here">Result will appear here</string>
 </resources>
