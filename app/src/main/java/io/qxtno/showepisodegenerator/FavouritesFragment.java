@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FavouritesFragment extends Fragment implements FavouritesAdapter.OnItemClickListener {
-    private FavouritesAdapter mAdapter;
+public class FavouritesFragment extends Fragment implements ShowAdapter.OnItemClickListener {
+    private ShowAdapter mAdapter;
     private ArrayList<Show> showFavListDB;
     private SharedPreferences prefs;
     private boolean sortedFav;
@@ -45,7 +45,7 @@ public class FavouritesFragment extends Fragment implements FavouritesAdapter.On
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new FavouritesAdapter(getActivity(), showFavListDB);
+        mAdapter = new ShowAdapter(getActivity(), showFavListDB);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
 
