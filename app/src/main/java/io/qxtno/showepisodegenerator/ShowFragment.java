@@ -1,5 +1,6 @@
 package io.qxtno.showepisodegenerator;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -169,7 +170,7 @@ public class ShowFragment extends Fragment {
                 resultTextView.setText(episodeInfo);
 
                 editor = prefs.edit();
-                String resultString = "S" + randomSeason + " E" + randomEpisode;
+                @SuppressLint("DefaultLocale") String resultString = "S" + String.format("%02d",randomSeason) + "E" + String.format("%02d",randomEpisode);
                 editor.putString("resultString", resultString).apply();
             }
         });
