@@ -46,6 +46,11 @@ public class ShowListFragment extends Fragment implements ShowAdapter.OnItemClic
         preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
 
+        int lastVersion = preferences.getInt("lastVersion", 1);
+
+        int version = BuildConfig.VERSION_CODE;
+
+        ArrayList<Show> showArrayList;
         if (firstStart) {
             Gson gson = new Gson();
             String jsonString = JsonHelper.getJsonFromAssets(requireActivity().getApplicationContext());
@@ -53,7 +58,7 @@ public class ShowListFragment extends Fragment implements ShowAdapter.OnItemClic
             Type type = new TypeToken<ArrayList<Show>>() {
             }.getType();
 
-            ArrayList<Show> showArrayList = gson.fromJson(jsonString, type);
+            showArrayList = gson.fromJson(jsonString, type);
 
             assert showArrayList != null;
             for (Show show : showArrayList) {
@@ -62,8 +67,30 @@ public class ShowListFragment extends Fragment implements ShowAdapter.OnItemClic
 
             preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
             editor = preferences.edit();
-            editor.putBoolean("firstStart", false);
-            editor.apply();
+            editor.putBoolean("firstStart", false).apply();
+        }
+
+        if (lastVersion < version && !firstStart) {
+
+            showArrayList = (ArrayList<Show>) dbHelper.getAllShows();
+
+            Gson gson = new Gson();
+            String jsonString = JsonHelper.getJsonFromAssets(requireActivity().getApplicationContext());
+
+            Type type = new TypeToken<ArrayList<Show>>() {
+            }.getType();
+
+            ArrayList<Show> showArrayListNonFinal = gson.fromJson(jsonString, type);
+
+            assert showArrayListNonFinal != null;
+            for (Show show : showArrayListNonFinal) {
+                if (!showArrayList.contains(show)) {
+                    showArrayList.add(show);
+                    dbHelper.addShow(show);
+                }
+            }
+            editor = preferences.edit();
+            editor.putInt("lastVersion", version).commit();
         }
 
         showList = (ArrayList<Show>) dbHelper.getAllShows();
