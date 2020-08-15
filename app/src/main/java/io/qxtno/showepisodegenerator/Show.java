@@ -3,6 +3,9 @@ package io.qxtno.showepisodegenerator;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 class Show implements Parcelable {
     private int id;
     private String title;
@@ -19,12 +22,6 @@ class Show implements Parcelable {
         this.seasons = seasons;
         this.fav = fav;
         this.custom = custom;
-    }
-
-    public Show(String title, int[] seasons, boolean fav, boolean custom) {
-        this.title = title;
-        this.seasons = seasons;
-        this.fav = fav;
     }
 
     protected Show(Parcel in) {
@@ -100,5 +97,21 @@ class Show implements Parcelable {
         dest.writeIntArray(seasons);
         dest.writeInt(fav ? 1 : 0);
         dest.writeInt(custom ? 1 : 0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Show)) return false;
+        Show show = (Show) o;
+        return Objects.equals(title, show.title) &&
+                Arrays.equals(seasons, show.seasons);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(title);
+        result = 31 * result + Arrays.hashCode(seasons);
+        return result;
     }
 }
