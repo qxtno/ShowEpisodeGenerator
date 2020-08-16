@@ -16,8 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
-
 public class SettingsFragment extends Fragment {
     private SharedPreferences prefs;
     private SharedPreferences.Editor settingsEditor;
@@ -29,13 +27,15 @@ public class SettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.settings);
+
         RadioGroup themeGroup = view.findViewById(R.id.radio_group);
         RadioButton radio1 = view.findViewById(R.id.radio_light);
         RadioButton radio2 = view.findViewById(R.id.radio_dark);
         RadioButton radio3 = view.findViewById(R.id.radio_auto_battery_save);
         RadioButton radio4 = view.findViewById(R.id.radio_system_theme);
 
-        prefs = Objects.requireNonNull(getActivity()).getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("THEME", Context.MODE_PRIVATE);
 
         boolean r1 = prefs.getBoolean("theme_1", false);
         boolean r2 = prefs.getBoolean("theme_2", false);
@@ -75,7 +75,7 @@ public class SettingsFragment extends Fragment {
         themeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                prefs = Objects.requireNonNull(getContext()).getSharedPreferences("THEME", Context.MODE_PRIVATE);
+                prefs = requireContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
                 settingsEditor = prefs.edit();
                 switch (checkedId) {
                     case R.id.radio_light:

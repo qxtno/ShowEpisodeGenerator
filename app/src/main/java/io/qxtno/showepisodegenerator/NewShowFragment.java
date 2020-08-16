@@ -34,6 +34,8 @@ public class NewShowFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_add_show, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.add_new);
+
         final Show show = new Show();
 
         titleEditText = view.findViewById(R.id.title_edit_text);

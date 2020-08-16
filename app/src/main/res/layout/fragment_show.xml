@@ -12,21 +12,13 @@
         android:layout_weight="0.2"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/frag_title"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text=""
-            android:textAlignment="center"
-            tools:ignore="NestedWeights" />
-
         <Button
             android:id="@+id/frag_add_to_fav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/add" />
+            android:text="@string/add"
+            tools:ignore="NestedWeights" />
 
     </LinearLayout>
 
@@ -35,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.7"
+        style="@style/TextAppearance.AppCompat.Large"
         android:text=""
         android:textAlignment="center" />
 

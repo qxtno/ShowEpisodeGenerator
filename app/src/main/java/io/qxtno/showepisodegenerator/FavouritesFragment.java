@@ -35,6 +35,8 @@ public class FavouritesFragment extends Fragment implements ShowAdapter.OnItemCl
 
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.fav);
+
         ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
 
         showFavListDB = (ArrayList<Show>) dbHelper.getFavShows();

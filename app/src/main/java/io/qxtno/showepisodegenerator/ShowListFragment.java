@@ -41,6 +41,8 @@ public class ShowListFragment extends Fragment implements ShowAdapter.OnItemClic
 
         View view = inflater.inflate(R.layout.fragment_show_list, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.list);
+
         ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
 
         preferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);

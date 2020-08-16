@@ -52,6 +52,8 @@ public class ShowFragment extends Fragment {
         assert show != null;
         id = show.getId();
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(show.getTitle());
+
         setUpGen();
 
         Button add = view.findViewById(R.id.frag_add_to_fav);
@@ -133,9 +135,6 @@ public class ShowFragment extends Fragment {
         String title = show.getTitle();
         seasons = show.getSeasons();
         id = show.getId();
-
-        TextView titleTextView = view.findViewById(R.id.frag_title);
-        titleTextView.setText(title);
 
         resultTextView = view.findViewById(R.id.frag_result);
         resultTextView.setText(R.string.result_here);

@@ -34,6 +34,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         SharedPreferences prefs = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.home);
+
         CardView lastShowCard = view.findViewById(R.id.last_show);
 
         id = prefs.getInt("id", -1);

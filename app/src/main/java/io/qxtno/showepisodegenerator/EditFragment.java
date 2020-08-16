@@ -34,6 +34,8 @@ public class EditFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.edit);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             show = bundle.getParcelable("show");

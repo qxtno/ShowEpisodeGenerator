@@ -17,6 +17,8 @@ public class AboutFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
+        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.about);
+
         return view;
     }
 
