@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -101,5 +102,23 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void setDrawerEnabled(boolean enabled) {
+        int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED :
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
+        ((MainActivity) requireActivity()).drawerLayout.setDrawerLockMode(lockMode);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setDrawerEnabled(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        setDrawerEnabled(false);
     }
 }
