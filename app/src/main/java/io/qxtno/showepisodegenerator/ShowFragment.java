@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,15 +57,26 @@ public class ShowFragment extends Fragment {
 
         setUpGen();
 
-        Button add = view.findViewById(R.id.frag_add_to_fav);
+        final ImageButton add = view.findViewById(R.id.frag_add_to_fav);
+
+        if(!show.isFav()){
+            add.setImageResource(R.drawable.ic_favorite_empty);
+        }else {
+            add.setImageResource(R.drawable.ic_favorite);
+        }
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
                 if (!show.isFav()) {
                     show.setFav(true);
+                    add.setImageResource(R.drawable.ic_favorite);
+                    Toast.makeText(requireActivity(),R.string.fav_added,Toast.LENGTH_SHORT).show();
                 } else {
                     show.setFav(false);
+                    add.setImageResource(R.drawable.ic_favorite_empty);
+                    Toast.makeText(requireActivity(),R.string.fav_removed,Toast.LENGTH_SHORT).show();
                 }
                 dbHelper.updateFav(show);
             }

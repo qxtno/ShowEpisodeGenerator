@@ -44,4 +44,6 @@
     <string name="all_empty">Title and seasons fields cannot be empty</string>
     <string name="theme_sett">Theme chooser</string>
     <string name="result_here">Result will appear here</string>
+    <string name="fav_added">Show was added to favourites</string>
+    <string name="fav_removed">Show was removed from favourites</string>
 </resources>
