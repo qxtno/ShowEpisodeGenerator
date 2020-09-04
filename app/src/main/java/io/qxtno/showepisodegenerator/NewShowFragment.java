@@ -25,7 +25,9 @@ import androidx.fragment.app.Fragment;
 public class NewShowFragment extends Fragment {
     private EditText titleEditText;
     private EditText seasonsEditText;
+    private EditText datesEditText;
     private CheckBox favCheckBox;
+    private Show show;
 
 
     @Nullable
@@ -34,12 +36,13 @@ public class NewShowFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_add_show, container, false);
 
-        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.add_new);
+        ((MainActivity) requireActivity()).toolbar.setTitle(R.string.add_new);
 
-        final Show show = new Show();
+        show = new Show();
 
         titleEditText = view.findViewById(R.id.title_edit_text);
         seasonsEditText = view.findViewById(R.id.seasons_edit_text);
+        datesEditText = view.findViewById(R.id.aired_edit_text);
         Button addShow = view.findViewById(R.id.add_new_show);
         favCheckBox = view.findViewById(R.id.fav_check_box);
 
@@ -47,7 +50,7 @@ public class NewShowFragment extends Fragment {
             @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                if (!titleEditText.getText().toString().equals("") && !seasonsEditText.getText().toString().equals("")) {
+                if (!titleEditText.getText().toString().equals("") && !seasonsEditText.getText().toString().equals("") && !datesEditText.getText().toString().equals("")) {
                     show.setTitle(titleEditText.getText().toString());
 
                     String seasonString = seasonsEditText.getText().toString();
@@ -71,12 +74,14 @@ public class NewShowFragment extends Fragment {
                         show.setFav(false);
                     }
                     show.setCustom(true);
+                    show.setDate(datesEditText.getText().toString());
 
                     ShowDBHelper dbHelper = new ShowDBHelper(getActivity());
                     dbHelper.addShow(show);
 
                     titleEditText.setText("");
                     seasonsEditText.setText("");
+                    datesEditText.setText("");
                     hideKeyboard();
                     favCheckBox.setChecked(false);
 
@@ -87,6 +92,8 @@ public class NewShowFragment extends Fragment {
                     Toast.makeText(requireActivity(), R.string.season_empty, Toast.LENGTH_SHORT).show();
                 } else if (!seasonsEditText.getText().toString().equals("")) {
                     Toast.makeText(requireActivity(), R.string.title_empty, Toast.LENGTH_SHORT).show();
+                } else if (!datesEditText.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.dates_empty, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(requireActivity(), R.string.all_empty, Toast.LENGTH_SHORT).show();
                 }

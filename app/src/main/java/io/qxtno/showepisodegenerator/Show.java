@@ -12,16 +12,18 @@ class Show implements Parcelable {
     private int[] seasons;
     private boolean fav;
     private boolean custom;
+    private String date;
 
     public Show() {
     }
 
-    Show(int id, String title, int[] seasons, boolean fav, boolean custom) {
+    Show(int id, String title, int[] seasons, boolean fav, boolean custom, String date) {
         this.id = id;
         this.title = title;
         this.seasons = seasons;
         this.fav = fav;
         this.custom = custom;
+        this.date = date;
     }
 
     protected Show(Parcel in) {
@@ -30,6 +32,7 @@ class Show implements Parcelable {
         seasons = in.createIntArray();
         fav = in.readInt() == 1;
         custom = in.readInt() == 1;
+        date = in.readString();
     }
 
     public static final Creator<Show> CREATOR = new Creator<Show>() {
@@ -85,6 +88,14 @@ class Show implements Parcelable {
         this.custom = custom;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -97,6 +108,7 @@ class Show implements Parcelable {
         dest.writeIntArray(seasons);
         dest.writeInt(fav ? 1 : 0);
         dest.writeInt(custom ? 1 : 0);
+        dest.writeString(date);
     }
 
     @Override

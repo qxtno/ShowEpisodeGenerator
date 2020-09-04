@@ -14,7 +14,8 @@
       18
     ],
     "fav": true,
-    "custom" : false
+    "custom": false,
+    "date": "1994-2004"
   },
   {
     "title": "Seinfeld",
@@ -30,7 +31,8 @@
       24
     ],
     "fav": false,
-    "custom" : false
+    "custom": false,
+    "date": "1990-1998"
   },
   {
     "title": "The Big Bang Theory",
@@ -49,7 +51,8 @@
       24
     ],
     "fav": false,
-    "custom" : false
+    "custom": false,
+    "date": "2007-2019"
   },
   {
     "title": "How I Met Your Mother",
@@ -65,6 +68,43 @@
       24
     ],
     "fav": false,
-    "custom" : false
+    "custom": false,
+    "date": "2005-2014"
+  },
+  {
+    "title": "Modern Family",
+    "seasons": [
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      22,
+      22,
+      22,
+      22,
+      18
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2009-2020"
+  },
+  {
+    "title": "The Office (US)",
+    "seasons": [
+      6,
+      22,
+      25,
+      19,
+      28,
+      26,
+      26,
+      24,
+      25
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2005-2013"
   }
 ]

@@ -33,6 +33,7 @@ public class ShowFragment extends Fragment {
     private int randomSeason;
     private int[] seasons;
     private TextView resultTextView;
+    private TextView datesTextView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private String episodeInfo;
@@ -163,6 +164,9 @@ public class ShowFragment extends Fragment {
             }
         }
         show.setSeasons(seasons);
+
+        datesTextView = view.findViewById(R.id.show_dates_text_view);
+        datesTextView.setText(show.getDate());
 
         Button randomize = view.findViewById(R.id.frag_random);
 

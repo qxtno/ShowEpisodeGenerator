@@ -30,8 +30,9 @@ public class ShowDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_SHOWLIST_TABLE = "CREATE TABLE " + ShowEntry.TABLE_NAME + " (" +
                 ShowEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ShowEntry.COLUMN_TITLE + " TEXT NOT NULL, " + ShowEntry.COLUMN_SEASONS + " TEXT NOT NULL, " +
-                ShowEntry.COLUMN_FAV + " INTEGER DEFAULT 0, " + ShowEntry.COLUMN_CUSTOM + " INTEGER DEFAULT 0, " + ShowEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
-                ");";
+                ShowEntry.COLUMN_FAV + " INTEGER DEFAULT 0, " + ShowEntry.COLUMN_CUSTOM + " INTEGER DEFAULT 0, " +
+                ShowEntry.COLUMN_DATE + " TEXT NOT NULL, " +
+                ShowEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" + ");";
 
         db.execSQL(SQL_CREATE_SHOWLIST_TABLE);
     }
@@ -49,6 +50,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
         contentValues.put(ShowEntry.COLUMN_SEASONS, Arrays.toString(show.getSeasons()));
         contentValues.put(ShowEntry.COLUMN_FAV, show.isFav());
         contentValues.put(ShowEntry.COLUMN_CUSTOM, show.isCustom());
+        contentValues.put(ShowEntry.COLUMN_DATE, show.getDate());
 
         mDatabase.insert(ShowEntry.TABLE_NAME, null, contentValues);
         mDatabase.close();
@@ -56,7 +58,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
 
     public Show getShow(int id) {
         SQLiteDatabase mDatabase = this.getReadableDatabase();
-        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(ShowEntry.TABLE_NAME, new String[]{ShowEntry.COLUMN_ID, ShowEntry.COLUMN_TITLE, ShowEntry.COLUMN_SEASONS, ShowEntry.COLUMN_FAV, ShowEntry.COLUMN_CUSTOM}, ShowEntry.COLUMN_ID + "=?",
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(ShowEntry.TABLE_NAME, new String[]{ShowEntry.COLUMN_ID, ShowEntry.COLUMN_TITLE, ShowEntry.COLUMN_SEASONS, ShowEntry.COLUMN_FAV, ShowEntry.COLUMN_CUSTOM, ShowEntry.COLUMN_DATE}, ShowEntry.COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -76,7 +78,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
         }
         mDatabase.close();
         return new Show(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), seasons, cursor.getInt(3) == 1, cursor.getInt(4) == 1);
+                cursor.getString(1), seasons, cursor.getInt(3) == 1, cursor.getInt(4) == 1, cursor.getString(5));
     }
 
     public void updateFav(Show show) {
@@ -96,6 +98,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
 
         contentValues.put(ShowEntry.COLUMN_TITLE, show.getTitle());
         contentValues.put(ShowEntry.COLUMN_SEASONS, Arrays.toString(show.getSeasons()));
+        contentValues.put(ShowEntry.COLUMN_DATE, show.getDate());
 
         mDatabase.update(ShowEntry.TABLE_NAME, contentValues, ShowEntry.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(show.getId())});
@@ -127,6 +130,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 show.setSeasons(seasons);
                 show.setFav(cursor.getInt(3) == 1);
                 show.setCustom(cursor.getInt(4) == 1);
+                show.setDate(cursor.getString(5));
                 showList.add(show);
             } while (cursor.moveToNext());
         }
@@ -159,6 +163,7 @@ public class ShowDBHelper extends SQLiteOpenHelper {
                 show.setSeasons(seasons);
                 show.setFav(cursor.getInt(3) == 1);
                 show.setCustom(cursor.getInt(4) == 1);
+                show.setDate(cursor.getString(5));
 
                 if (show.isFav()) {
                     showList.add(show);

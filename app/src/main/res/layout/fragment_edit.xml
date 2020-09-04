@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,19 +11,30 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/title"
-        android:text=""
-        android:inputType="textCapWords" />
+        android:inputType="textCapWords"
+        android:text="" />
 
     <EditText
         android:id="@+id/activity_edit_seasons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
+        android:digits="01234567890, "
         android:ems="10"
         android:hint="@string/seasons"
-        android:text=""
         android:inputType="numberDecimal"
-        android:digits="01234567890, "/>
+        android:text="" />
+
+    <EditText
+        android:id="@+id/activity_edit_dates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:digits="1234567890-"
+        android:ems="10"
+        android:hint="@string/air_date"
+        android:inputType="numberDecimal"
+        android:text=""/>
 
     <Button
         android:id="@+id/activity_edit_save"

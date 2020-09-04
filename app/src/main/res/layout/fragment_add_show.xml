@@ -8,21 +8,30 @@
         android:id="@+id/title_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textCapWords"
-        android:hint="@string/title"
         android:autofillHints=""
-        />
+        android:ems="10"
+        android:hint="@string/title"
+        android:inputType="textCapWords" />
 
     <EditText
         android:id="@+id/seasons_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:hint="@string/seasons"
         android:autofillHints=""
-        android:digits="1234567890, "/>
+        android:digits="1234567890, "
+        android:ems="10"
+        android:hint="@string/seasons"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/aired_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:digits="1234567890-"
+        android:ems="10"
+        android:hint="@string/air_date"
+        android:inputType="numberDecimal" />
 
     <CheckBox
         android:id="@+id/fav_check_box"

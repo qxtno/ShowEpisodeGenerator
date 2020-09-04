@@ -34,7 +34,7 @@ public class EditFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        ((MainActivity)requireActivity()).toolbar.setTitle(R.string.edit);
+        ((MainActivity) requireActivity()).toolbar.setTitle(R.string.edit);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -42,6 +42,7 @@ public class EditFragment extends Fragment {
         }
         final EditText editTitle = view.findViewById(R.id.activity_edit_title);
         final EditText editSeasons = view.findViewById(R.id.activity_edit_seasons);
+        final EditText editDates = view.findViewById(R.id.activity_edit_dates);
         Button editSave = view.findViewById(R.id.activity_edit_save);
 
         assert show != null;
@@ -49,12 +50,14 @@ public class EditFragment extends Fragment {
         String seasonsText = Arrays.toString(show.getSeasons());
         seasonsText = seasonsText.substring(1, seasonsText.length() - 1);
         editSeasons.setText(seasonsText);
+        editDates.setText(show.getDate());
+
         id = show.getId();
 
         editSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editTitle.getText().toString().equals("") && !editSeasons.getText().toString().equals("")) {
+                if (!editTitle.getText().toString().equals("") && !editSeasons.getText().toString().equals("") && !editDates.getText().toString().equals("")) {
                     dbHelper = new ShowDBHelper(getActivity());
                     Show show1 = dbHelper.getShow(id);
                     show1.setTitle(editTitle.getText().toString());
@@ -71,6 +74,7 @@ public class EditFragment extends Fragment {
                         }
                     }
                     show1.setSeasons(seasons);
+                    show1.setDate(editDates.getText().toString());
 
                     dbHelper.updateShow(show1);
 
@@ -84,6 +88,8 @@ public class EditFragment extends Fragment {
                     Toast.makeText(requireActivity(), R.string.season_empty, Toast.LENGTH_SHORT).show();
                 } else if (!editSeasons.getText().toString().equals("")) {
                     Toast.makeText(requireActivity(), R.string.title_empty, Toast.LENGTH_SHORT).show();
+                } else if (!editDates.getText().toString().equals("")) {
+                    Toast.makeText(requireActivity(), R.string.dates_empty, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(requireActivity(), R.string.all_empty, Toast.LENGTH_SHORT).show();
                 }
