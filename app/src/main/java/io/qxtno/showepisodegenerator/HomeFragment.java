@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class HomeFragment extends Fragment {
 
     private int id;
+    private int deletedId;
     private Show show;
 
     @SuppressLint("SetTextI18n")
@@ -39,11 +40,12 @@ public class HomeFragment extends Fragment {
         CardView lastShowCard = view.findViewById(R.id.last_show);
 
         id = prefs.getInt("id", -1);
+        deletedId = prefs.getInt("deletedId",-2);
 
         TextView homeResults = view.findViewById(R.id.home_title_results);
         homeResults.setText(R.string.show_appear);
 
-        if (id != -1) {
+        if (id != -1 && id !=deletedId) {
             ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
             show = dbHelper.getShow(id);
             String seasonString = Arrays.toString(show.getSeasons());

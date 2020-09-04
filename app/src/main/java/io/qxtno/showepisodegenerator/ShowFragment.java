@@ -29,11 +29,11 @@ public class ShowFragment extends Fragment {
     private View view;
     private Show show;
     private int id;
+    private int deletedId;
     private int randomEpisode;
     private int randomSeason;
     private int[] seasons;
     private TextView resultTextView;
-    private TextView datesTextView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private String episodeInfo;
@@ -121,6 +121,9 @@ public class ShowFragment extends Fragment {
                         dbHelper.deleteShow(show);
                         requireActivity().onBackPressed();
                         Toast.makeText(getActivity(), R.string.delete_done, Toast.LENGTH_SHORT).show();
+                        deletedId = id;
+                        editor = prefs.edit();
+                        editor.putInt("deletedId", deletedId).apply();
                         return true;
                     } else {
                         Toast.makeText(getActivity(), R.string.cannot_delete, Toast.LENGTH_SHORT).show();
@@ -145,7 +148,6 @@ public class ShowFragment extends Fragment {
         ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
         show = dbHelper.getShow(id);
         assert show != null;
-        String title = show.getTitle();
         seasons = show.getSeasons();
         id = show.getId();
 
@@ -165,7 +167,7 @@ public class ShowFragment extends Fragment {
         }
         show.setSeasons(seasons);
 
-        datesTextView = view.findViewById(R.id.show_dates_text_view);
+        TextView datesTextView = view.findViewById(R.id.show_dates_text_view);
         datesTextView.setText(show.getDate());
 
         Button randomize = view.findViewById(R.id.frag_random);
