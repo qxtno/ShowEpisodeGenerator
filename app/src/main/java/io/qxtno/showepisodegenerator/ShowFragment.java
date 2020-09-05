@@ -56,7 +56,12 @@ public class ShowFragment extends Fragment {
 
         ((MainActivity)requireActivity()).toolbar.setTitle(show.getTitle());
 
-        setUpGen();
+        if(savedInstanceState!=null){
+            episodeInfo = savedInstanceState.getString("results");
+            setUpGen(episodeInfo);
+        }else {
+            setUpGen(getResources().getString(R.string.result_here));
+        }
 
         final ImageButton add = view.findViewById(R.id.frag_add_to_fav);
 
@@ -141,10 +146,9 @@ public class ShowFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setUpGen();
     }
 
-    private void setUpGen() {
+    private void setUpGen(String resultText) {
         ShowDBHelper dbHelper = new ShowDBHelper(requireActivity().getApplicationContext());
         show = dbHelper.getShow(id);
         assert show != null;
@@ -152,7 +156,7 @@ public class ShowFragment extends Fragment {
         id = show.getId();
 
         resultTextView = view.findViewById(R.id.frag_result);
-        resultTextView.setText(R.string.result_here);
+        resultTextView.setText(resultText);
 
         String seasonString = Arrays.toString(show.getSeasons());
         String[] items = seasonString.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\\s", "").split(",");
@@ -201,17 +205,6 @@ public class ShowFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("results",episodeInfo);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState!=null){
-            episodeInfo = savedInstanceState.getString("results");
-        }
-
-        resultTextView = view.findViewById(R.id.frag_result);
-        resultTextView.setText(episodeInfo);
+        outState.putString("results", episodeInfo);
     }
 }
