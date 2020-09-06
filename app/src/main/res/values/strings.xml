@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Show Episode Generator</string>
+    <string name="version">1.0</string>
     <string name="ep">"Episode: "</string>
     <string name="se">"Season: "</string>
     <string name="random">Random Episode</string>
@@ -48,4 +49,10 @@
     <string name="fav_added">Show was added to favourites</string>
     <string name="fav_removed">Show was removed from favourites</string>
     <string name="air_date">When aired</string>
+    <string name="about_text">This simple app allows you to generate random episode number of your favourite show.</string>
+    <string name="github_page">Check out my github page!</string>
+    <string name="email">Have any suggestions? Let me know!</string>
+    <string name="github">Github</string>
+    <string name="my_email">E-mail</string>
+    <string name="made_by">Made with ❤️ by qxtno</string>
 </resources>
