@@ -13,7 +13,7 @@
       24,
       18
     ],
-    "fav": true,
+    "fav": false,
     "custom": false,
     "date": "1994-2004"
   },
@@ -106,5 +106,109 @@
     "fav": false,
     "custom": false,
     "date": "2005-2013"
+  },
+  {
+    "title": "Great News",
+    "seasons": [
+      10,
+      13
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2017-2018"
+  },
+  {
+    "title": "Fuller House",
+    "seasons": [
+      13,
+      13,
+      18,
+      13,
+      18
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2016-2020"
+  },
+  {
+    "title": "Community",
+    "seasons": [
+      25,
+      24,
+      22,
+      13,
+      13,
+      13
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2009-2015"
+  },
+  {
+    "title": "The Good Place",
+    "seasons": [
+      13,
+      13,
+      13,
+      14
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2016-2020"
+  },
+  {
+    "title": "Unbreakable Kimmy Schmidt",
+    "seasons": [
+      13,
+      13,
+      13,
+      12
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2015-2020"
+  },
+  {
+    "title": "The IT Crowd",
+    "seasons": [
+      6,
+      6,
+      6,
+      6
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2006-2010"
+  },
+  {
+    "title": "The Inbetweeners",
+    "seasons": [
+      6,
+      6,
+      6
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2008-2010"
+  },
+  {
+    "title": "Trailer Park Boys",
+    "seasons": [
+      6,
+      7,
+      8,
+      8,
+      10,
+      6,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "fav": false,
+    "custom": false,
+    "date": "2001-2018"
   }
 ]
